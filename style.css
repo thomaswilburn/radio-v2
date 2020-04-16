@@ -7,8 +7,10 @@
   --content-font: 'Open Sans', serif;
   --title-font: 'Oswald', sans-serif;
   --foreground: white;
-  --background: #333;
+  --background: #222;
   --shaded: #555;
+  --shaded-light: #888;
+  --shaded-dark: #333;
   --border: #AAA;
   --accent: #808;
   font-size: 16px;
