@@ -6,7 +6,7 @@
     <title>Radio</title>
     <link href="https://fonts.googleapis.com/css?family=Comfortaa|Oswald|Open+Sans&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="lib/radio.webmanifest">
+    <link rel="manifest" href="./assets/radio.webmanifest">
     <link rel="icon" href="assets/icon.png" type="image/png">
   </head>
   <body>
@@ -19,7 +19,7 @@ import "./audio-player.js";
 import "./podcast-list.js";
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./service-worker.js").then(registration => console.log(registration));
+  navigator.serviceWorker.register("./lib/service-worker.js").then(registration => console.log(registration));
 }
     </script>
   </body>
