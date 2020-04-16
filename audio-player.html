@@ -1,0 +1,164 @@
+<style>
+  :host {
+    position: relative;
+    font-family: var(--ui-font);
+  }
+  
+  .track {
+    background: var(--shaded);
+    padding: 16px;
+    box-shadow: 0 -8px 16px rgba(0, 0, 0, .3);
+  }
+  
+  .track .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 8px;
+  }
+  
+  .track .row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .progress-container {
+    height: 16px;
+    background: var(--background);
+    position: relative;
+    flex: 1;
+  }
+  
+  .progress {
+    pointer-events: none;
+    background: var(--accent);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }
+  
+  .handle {
+    position: absolute;
+    bottom: 0;
+    height: 120%;
+    width: 4px;
+    right: 0;
+    background: var(--foreground);
+    border-radius: 4px;
+  }
+  
+  hr {
+    margin: 0 16px;
+    border: 1px solid var(--background);
+    align-self: stretch;
+  }
+  
+  .time {
+    font-size: .8rem;
+  }
+  
+  .time span {
+    display: block;
+  }
+  
+  .fabs {
+    position: absolute;
+    bottom: 100%;
+    right: 10px;
+    display: none;
+  }
+  
+  :host(.playable) .fabs {
+    display: block;
+  }
+  
+  .fabs button {
+    background: var(--accent);
+    color: var(--foreground);
+    border-radius: 100%;
+    border: 1px solid transparent;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .3);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    font-size: .8rem;
+    font-weight: bold;
+    font-family: inherit;
+    margin: 0 auto 16px;
+  }
+  
+  .fabs [as=play] {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .fabs svg {
+    display: block;
+  }
+  
+  .fabs svg .icon {
+    display: none;
+  }
+  
+  [as=play][data-state="paused"] .play.icon {
+    display: block;
+  }
+  
+  [as=play][data-state="playing"] .pause.icon {
+    display: block;
+  }
+  
+  [as=play][data-state="seeking"] .seek.icon {
+    display: block;
+  }
+  
+  :host(.disabled) {
+    --accent: var(--border);
+  }
+  
+  :host(.disabled) .fabs,
+  :host(.disabled) .progress-container {
+    pointer-events: none;
+    opacity: .5;
+  }
+</style>
+<div class="track">
+  <div class="title" as="title"></div>
+  <div class="row">
+    <div class="progress-container" as="scrubber">
+      <div class="progress" as="progress">
+        <div class="handle"></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="time">
+      <span as="current">0:00:00</span>
+      <span as="duration">0:00:00</span>
+    </div>
+  </div>
+</div>
+<div class="fabs">
+  <button as="skip">
+    <span>+A</span>
+  </button>
+  <button as="play" data-state="seeking">
+    <svg width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none">
+      <path class="play icon" d="M8,4 L28,16 L8,28 Z" fill="currentColor" />
+      <g class="pause icon">
+        <line x1="10" x2="10" y1="4" y2="28" stroke="currentColor" stroke-width="5" />
+        <line x1="22" x2="22" y1="4" y2="28" stroke="currentColor" stroke-width="5" />
+      </g>
+      <g class="seek icon">
+        <circle cx="4" cy="16" r="4" fill="currentColor" />
+        <circle cx="16" cy="16" r="4" fill="currentColor" />
+        <circle cx="28" cy="16" r="4" fill="currentColor" />
+      </g>
+    </svg>
+  </button>
+</div>

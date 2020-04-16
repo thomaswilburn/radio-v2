@@ -1,0 +1,145 @@
+<style>
+  :host {
+    display: block;
+    border-top: 1px solid var(--border);
+    position: relative;
+    margin-bottom: 8px;
+  }
+  
+  .feed-meta {
+    position: sticky;
+    top: 0;
+  }
+
+  .feed-meta .primary {
+    display: flex;
+    background: var(--shaded);
+    font-family: var(--title-font);
+    align-items: center;
+  }
+  
+  [as="title"] {
+    white-space: nowrap;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+  
+  @keyframes spinner {
+    from { transform: scale(1) }
+    to { transform: scale(1.4) }
+  }
+  
+  .load-spinner {
+    display: none;
+    padding: 0 12px;
+    font-size: 1.2rem;
+    animation: .3s spinner infinite ease-in-out alternate;
+  }
+  
+  :host(.loading) .load-spinner {
+    display: block;
+  }
+  
+  :host(.loading) .counts {
+    display: none;
+  }
+  
+  .expando {
+    transform-origin: center;
+    transform: rotateX(180deg);
+    transition: transform .4s ease;
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 4px 16px;
+    font-size: 2rem;
+  }
+  
+  .expando[aria-pressed="true"] {
+    transform: rotateX(0);
+  }
+  
+  .controls {
+    display: flex;
+    font-size: .8rem;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: var(--background);
+    margin-bottom: 12px;
+  }
+  
+  .controls button {
+    background: transparent;
+    border: 1px solid var(--foreground);
+    text-transform: uppercase;
+    padding: 4px;
+    color: var(--foreground);
+    font-size: inherit;
+  }
+  
+  [as="showMoreButton"] {
+    display: block;
+    width: 100%;
+    font-size: 1.2rem;
+    font-family: var(--ui-font);
+    background: transparent;
+    border: none;
+    color: var(--foreground);
+    text-transform: uppercase;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  :host(:not(.expanded)) .controls {
+    display: none;
+  }
+  
+  :host(:not(.expanded)) .onlyExpanded {
+    display: none;
+  }
+  
+  :host(.searching) .notSearching {
+    display: none;
+  }
+</style>
+<div class="feed-meta">
+  <div class="primary">
+    <div as="title">Loading...</div>
+    <div class="load-spinner"> 𝅘𝅥𝅮𝅘𝅥𝅯𝅘𝅥𝅮 </div>
+    <div class="counts">
+      (<span as="unheard"></span> / <span as="total"></span>)
+    </div>
+    <button
+      aria-label="expand feed"
+      aria-pressed="false"
+      class="expando"
+      as="expandButton"
+    >
+      &#9661;
+    </button>
+  </div>
+  <div class="controls">
+    <button as="unsubscribeButton">
+      Remove
+    </button>
+    <button as="renameButton">
+      Rename
+    </button>
+    <button as="searchButton">
+      Search
+    </button>
+    <button as="markReadButton" hidden>
+      Mark read
+    </button>
+    <button as="refreshButton">
+      Refresh
+    </button>
+  </div>
+</div>
+<div class="onlyExpanded" as="items"></div>
+<button class="notSearching onlyExpanded" as="showMoreButton">
+  Show more...
+</button>

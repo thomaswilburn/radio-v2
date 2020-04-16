@@ -1,0 +1,80 @@
+<style>
+  :host {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 8px;
+    background: var(--shaded);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+  }
+  
+  hr {
+    border: 1px solid var(--foreground);
+    align-self: stretch;
+    margin: 8px;
+  }
+  
+  .metadata {
+    display: flex;
+    font-family: var(--title-font);
+    padding: 4px;
+    align-items: center;
+  }
+  
+  [as="playButton"] {
+    border: none;
+    color: var(--foreground);
+    background: var(--background);
+    text-transform: uppercase;
+    padding: 16px 8px;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  
+  [as="playButton"]:focus,
+  [as="playButton"]:focus-within {
+    outline: 1px solid var(--accent);
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    flex: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  [as="expandButton"] {
+    font-size: 2rem;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    color: var(--foreground);
+    padding: 4px 12px;
+  }
+  
+  .description {
+    display: none;
+    font-family: var(--content-font);
+    padding: 4px 24px 24px;
+    font-size: 1rem;
+  }
+  
+  :host(.expanded) .description {
+    display: block;
+  }
+</style>
+<div class="metadata">
+  <button as="playButton">
+    Play
+  </button>
+  <hr>
+  <div class="title">
+    <slot name="title"></slot>
+  </div>
+  <hr>
+  <button as="expandButton" aria-pressed="false">
+    &vellip;
+  </button>
+</div>
+<div class="description">
+  <slot name="description"></slot>
+</div>
