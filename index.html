@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Radio</title>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Oswald|Open+Sans&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="radio.webmanifest">
+    <link rel="icon" href="icon.png" type="image/png">
+  </head>
+  <body>
+    <menu-bar role="nav"></menu-bar>
+    <podcast-list role="main"></podcast-list>
+    <audio-player role="contentinfo"></audio-player>
+    <script type="module">
+import "./menu-bar.js";
+import "./audio-player.js";
+import "./podcast-list.js";
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./service-worker.js").then(registration => console.log(registration));
+}
+    </script>
+  </body>
+</html>

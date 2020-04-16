@@ -1,0 +1,57 @@
+<style>
+  :host {
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px;
+    font-size: .8rem;
+  }
+  
+  h1 {
+    font-family: var(--title-font);
+    margin: 0;
+    font-size: inherit;
+    text-transform: uppercase;
+    font-weight: normal;
+    flex: 1;
+  }
+  
+  select {
+    background: transparent;
+    color: inherit;
+    border: 1px solid var(--foreground);
+    padding: 4px;
+    font-family: var(--ui-font);
+    font-size: inherit;
+    text-align: center;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    margin-right: 4px;
+    text-transform: uppercase;
+  }
+  
+  button {
+    border: 1px solid var(--foreground);
+    padding: 4px 24px;
+    text-transform: uppercase;
+    font-family: var(--ui-font);
+    font-size: inherit;
+    color: inherit;
+    background: transparent;
+  }
+</style>
+<h1>
+  Radio
+</h1>
+<select as="menu">
+  <option value="">Menu</option>
+  <option value="refresh-all">Refresh all</option>
+  <option value="podcast-subscribe">Add feed</option>
+  <option value="sync-export">Sync export</option>
+  <option value="sync-import">Sync import</option>
+</select>
+<button as="refresh" hidden>
+  Refresh
+</button>

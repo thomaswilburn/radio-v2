@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --ui-font: 'Comfortaa', sans-serif;
+  --content-font: 'Open Sans', serif;
+  --title-font: 'Oswald', sans-serif;
+  --foreground: white;
+  --background: #333;
+  --shaded: #555;
+  --border: #AAA;
+  --accent: #808;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: sans-serif;
+  touch-action: manipulation;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.sr-only {
+  position: absolute;
+  left: -1000px;
+  opacity: 0;
+}
+
+podcast-list {
+  display: block;
+  flex: 1;
+  overflow-y: scroll;
+}
+
+audio-player {
+  box-shadow: 0 -8px 8px rgba(0, 0, 0, .1);
+}
