@@ -1,4 +1,4 @@
-import ElementBase from "./element-base.js";
+import ElementBase from "./lib/element-base.js";
 
 class PodcastEpisode extends ElementBase {
   constructor() {

@@ -10,8 +10,8 @@ TODO:
 - Add better logging/recovery to the audio player - stalled, error, and abort?
 */
 
-import Table from "./storage.js";
-import Emitter from "./emitter.js";
+import Table from "./lib/storage.js";
+import Emitter from "./lib/emitter.js";
 
 class Radio extends Emitter {
   constructor() {
