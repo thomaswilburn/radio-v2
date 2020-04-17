@@ -2,12 +2,6 @@
 Singleton class for the app
 Elements can import this to get access to app state
 Also handles coordinating between the player and the other UI elements
-
-TODO:
-- Add playback memory to the audio class
-- Move subscription logic into this class?
-- Add import/export via copy-paste server
-- Add better logging/recovery to the audio player - stalled, error, and abort?
 */
 
 import Table from "./lib/storage.js";
