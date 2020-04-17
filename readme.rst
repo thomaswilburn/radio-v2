@@ -24,7 +24,7 @@ How this works
 
 By default, the app is run from Express (via ``server.js`` that proxies requests for remote feed XML, since many podcasts are not published with an Access-Control-Allow-Origin header. Otherwise, the client-side code is entirely static files and doesn't technically require an actual server for hosting.
 
-Application UI and rendering logic is built via custom elements, all of which extend ``lib/element-base.js``. This base class provides the ability to automatically bind methods, mirror properties, and populate/access the element's shadow root. Templates for each element are loaded by the static ``define`` method from a separate HTML file. Since this process is async (using ``fetch()``), code that accesses custom element properties and methods use ``customElements.whenDefined()`` to ensure that their dependencies are ready first.
+Application UI and rendering logic is built via custom elements, all of which extend ``lib/element-base.js``. This base class provides the ability to automatically bind methods, mirror properties, and populate/access the element's shadow root. Templates for each element are loaded by the static ``define`` method from a separate HTML file. Since this process is async (using ``fetch()``), modules that access custom element properties and methods use ``customElements.whenDefined()`` to ensure that their dependencies are ready first.
 
 The main components on the page, loaded from an inline module, are:
 
