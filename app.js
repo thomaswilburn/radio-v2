@@ -34,7 +34,7 @@ class Radio extends Emitter {
   
   async syncUp() {
     var feeds = await this.feeds.getAll();
-    var body = JSON.stringify(feeds.map(f => f.url));
+    var body = JSON.stringify(feeds.sort((a, b) => a.subscribed - b.subscribed).map(f => f.url));
     var post = await fetch("https://fetch-key-repeat.glitch.me/new", {
       method: "POST",
       body,
