@@ -85,7 +85,7 @@
     padding: 0;
     justify-content: center;
     align-items: center;
-    font-size: .8rem;
+    font-size: 1rem;
     font-weight: bold;
     font-family: inherit;
     margin: 0 auto 16px;
@@ -94,6 +94,10 @@
   .fabs [as=play] {
     width: 64px;
     height: 64px;
+  }
+
+  .fabs [as=stop] {
+    font-size: 1.5rem;
   }
   
   .fabs svg {
@@ -144,6 +148,9 @@
   </div>
 </div>
 <div class="fabs">
+  <button as="stop">
+    &times;
+  </button>
   <button as="skip">
     <span>+A</span>
   </button>

@@ -1,10 +1,14 @@
 import ElementBase from "./lib/element-base.js";
+import app from "./app.js";
 
 class PodcastEpisode extends ElementBase {
   constructor() {
     super();
     this.elements.expandButton.addEventListener("click", this.onExpand);
     this.elements.playButton.addEventListener("click", this.onClickPlay);
+    app.on("track-update", url => {
+      this.classList.toggle("playing", url == this.dataset.key);
+    });
   }
   
   static get boundMethods() {
