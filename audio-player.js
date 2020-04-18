@@ -103,6 +103,7 @@ class AudioPlayer extends ElementBase {
     this.elements.title.innerHTML = "";
     this.elements.current.innerHTML = this.formatTime(0);
     this.elements.duration.innerHTML = this.formatTime(0);
+    this.elements.progress.style.width = "0"
     this.classList.remove("playable");
     app.fire("track-update", null);
   }
