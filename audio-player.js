@@ -98,7 +98,7 @@ class AudioPlayer extends ElementBase {
 
   async onClickStop() {
     await this.audio.pause();
-    await new Promise(ok => requestAnimationFrame(ok));
+    this.audio.src = "";
     this.setEnabled(false);
     this.elements.title.innerHTML = "";
     this.elements.current.innerHTML = this.formatTime(0);
