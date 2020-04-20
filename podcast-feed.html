@@ -32,15 +32,15 @@
   }
   
   @keyframes spinner {
-    from { transform: scale(1) }
-    to { transform: scale(1.4) }
+    from { transform: rotateY(0) }
+    to { transform: rotateY(3600deg) }
   }
   
   .load-spinner {
     display: none;
     padding: 0 12px;
-    font-size: 1.2rem;
-    animation: .3s spinner infinite ease-in-out alternate;
+    font-size: 2rem;
+    animation: 5s spinner infinite ease-in-out alternate;
   }
   
   :host(.loading) .load-spinner {
@@ -112,7 +112,7 @@
 <div class="feed-meta">
   <div class="primary">
     <div as="title">Loading...</div>
-    <div class="load-spinner"> 𝅘𝅥𝅮𝅘𝅥𝅯𝅘𝅥𝅮 </div>
+    <div class="load-spinner">&#9836;</div>
     <div class="counts">
       (<span as="unheard"></span> / <span as="total"></span>)
     </div>
