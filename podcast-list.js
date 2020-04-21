@@ -1,7 +1,6 @@
-import ElementBase from "./element-base.js";
+import ElementBase from "./lib/element-base.js";
+import { matchData } from "./lib/common.js";
 import app from "./app.js";
-import { matchData } from "./common.js";
-import Table from "./storage.js";
 import "./podcast-feed.js";
 
 class PodcastList extends ElementBase {

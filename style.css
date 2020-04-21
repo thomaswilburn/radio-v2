@@ -5,14 +5,15 @@
 :root {
   --ui-font: 'Comfortaa', sans-serif;
   --content-font: 'Open Sans', serif;
-  --title-font: 'Oswald', sans-serif;
+  --title-font: 'Open Sans', serif;
+  --monospace-font: 'Nova Mono', monospace;
   --foreground: white;
   --background: #222;
   --shaded: #555;
   --shaded-light: #888;
   --shaded-dark: #333;
   --border: #AAA;
-  --accent: #808;
+  --accent: #623b62;
   font-size: 16px;
 }
 

@@ -2,16 +2,10 @@
 Singleton class for the app
 Elements can import this to get access to app state
 Also handles coordinating between the player and the other UI elements
-
-TODO:
-- Add playback memory to the audio class
-- Move subscription logic into this class?
-- Add import/export via copy-paste server
-- Add better logging/recovery to the audio player - stalled, error, and abort?
 */
 
-import Table from "./storage.js";
-import Emitter from "./emitter.js";
+import Table from "./lib/storage.js";
+import Emitter from "./lib/emitter.js";
 
 class Radio extends Emitter {
   constructor() {
@@ -34,7 +28,7 @@ class Radio extends Emitter {
   
   async syncUp() {
     var feeds = await this.feeds.getAll();
-    var body = JSON.stringify(feeds.map(f => f.url));
+    var body = JSON.stringify(feeds.sort((a, b) => a.subscribed - b.subscribed).map(f => f.url));
     var post = await fetch("https://fetch-key-repeat.glitch.me/new", {
       method: "POST",
       body,

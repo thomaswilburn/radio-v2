@@ -1,4 +1,4 @@
-import ElementBase from "./element-base.js";
+import ElementBase from "./lib/element-base.js";
 import app from "./app.js";
 
 class AudioPlayer extends ElementBase {
@@ -12,10 +12,12 @@ class AudioPlayer extends ElementBase {
     app.on("play-request", this.onPlayRequest);
     this.elements.play.addEventListener("click", this.onClickPlay);
     this.elements.skip.addEventListener("click", this.onClickSkip);
+    this.elements.stop.addEventListener("click", this.onClickStop);
     this.elements.scrubber.addEventListener("pointerdown", this.onTouchHandle);
     this.elements.scrubber.addEventListener("pointermove", this.onDragHandle);
     this.elements.scrubber.addEventListener("pointerup", this.onReleaseHandle);
     this.dragging = false;
+    this.paused = true;
     this.memory = null;
     this.setEnabled(false);
   }
@@ -27,6 +29,7 @@ class AudioPlayer extends ElementBase {
       "onAudioUpdate",
       "onClickPlay",
       "onClickSkip",
+      "onClickStop",
       "onTouchHandle",
       "onDragHandle",
       "onReleaseHandle"
@@ -58,21 +61,23 @@ class AudioPlayer extends ElementBase {
     var ratio = time / duration;
     this.elements.progress.style.width = ratio * 100 + "%";
     
-    var formatTime = function(t) {
-      var hours = (t / (60 * 60)) | 0;
-      t -= hours * 60 * 60;
-      var minutes = (t / 60) | 0;
-      t -= minutes * 60;
-      t = t | 0;
-      return [
-        hours,
-        (minutes + "").padStart(2, "0"),
-        (t + "").padStart(2, "0")
-      ].join(":");
-    }
-    
-    this.elements.current.innerHTML = formatTime(time);
-    this.elements.duration.innerHTML = formatTime(duration);
+    this.elements.current.innerHTML = this.formatTime(time);
+    this.elements.duration.innerHTML = this.formatTime(duration);
+
+    app.fire("track-update", this.audio.src);
+  }
+
+  formatTime(t) {
+    var hours = (t / (60 * 60)) | 0;
+    t -= hours * 60 * 60;
+    var minutes = (t / 60) | 0;
+    t -= minutes * 60;
+    t = t | 0;
+    return [
+      hours,
+      (minutes + "").padStart(2, "0"),
+      (t + "").padStart(2, "0")
+    ].join(":");
   }
   
   onAudioError() {
@@ -90,9 +95,23 @@ class AudioPlayer extends ElementBase {
   onClickSkip() {
     this.audio.currentTime += 10;
   }
+
+  async onClickStop() {
+    await this.audio.pause();
+    this.audio.src = "";
+    this.setEnabled(false);
+    this.elements.title.innerHTML = "";
+    this.elements.current.innerHTML = this.formatTime(0);
+    this.elements.duration.innerHTML = this.formatTime(0);
+    this.elements.progress.style.width = "0"
+    this.classList.remove("playable");
+    app.fire("track-update", null);
+  }
   
   onTouchHandle(e) {
     this.dragging = true;
+    this.paused = this.audio.paused;
+    this.audio.pause();
     this.elements.scrubber.setPointerCapture(e.pointerId);
   }
   
@@ -100,9 +119,12 @@ class AudioPlayer extends ElementBase {
     if (!this.dragging) return;
     var x = e.offsetX;
     var d = x / this.elements.scrubber.offsetWidth;
+    var duration = this.audio.duration;
     if (d < 0) d = 0;
     if (d > 1) d = 1;
+    var time = duration * d;
     this.elements.progress.style.width = (d * 100) + "%";
+    this.elements.current.innerHTML = this.formatTime(time);
   }
   
   onReleaseHandle(e) {
@@ -112,6 +134,9 @@ class AudioPlayer extends ElementBase {
     if (d < 0) d = 0;
     if (d > 1) d = 1;
     this.audio.currentTime = this.audio.duration * d;
+    if (!this.paused) {
+      this.audio.play();
+    }
   }
   
 }

@@ -1,6 +1,6 @@
-import ElementBase from "./element-base.js";
+import ElementBase from "./lib/element-base.js";
+import { $, matchData, proxyXML, removeCDATA } from "./lib/common.js";
 import app from "./app.js";
-import { $, matchData, proxyXML, removeCDATA } from "./common.js";
 import "./podcast-episode.js";
 
 class PodcastFeed extends ElementBase {
