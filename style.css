@@ -5,7 +5,8 @@
 :root {
   --ui-font: 'Comfortaa', sans-serif;
   --content-font: 'Open Sans', serif;
-  --title-font: 'Oswald', sans-serif;
+  --title-font: 'Open Sans', serif;
+  --monospace-font: 'Nova Mono', monospace;
   --foreground: white;
   --background: #222;
   --shaded: #555;
