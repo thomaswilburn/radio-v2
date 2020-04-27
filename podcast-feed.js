@@ -67,6 +67,7 @@ class PodcastFeed extends ElementBase {
     this.feed = parsed;
     var listened = metadata.listened || 0;
     var unheard = this.feed.items.filter(f => f.date > listened).length;
+    this.dataset.unheard = unheard;
     this.elements.unheard.innerHTML = unheard;
     this.elements.total.innerHTML = this.feed.items.length;
     // render episode items
@@ -158,6 +159,7 @@ class PodcastFeed extends ElementBase {
     metadata.listened = Date.now();
     app.feeds.set(this.src, metadata);
     this.elements.unheard.innerHTML = 0;
+    this.dataset.unheard = 0;
   }
 }
 

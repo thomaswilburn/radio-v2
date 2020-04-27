@@ -27,7 +27,7 @@
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     padding: 8px;
   }
   
@@ -49,6 +49,10 @@
   
   :host(.loading) .counts {
     display: none;
+  }
+
+  :host([data-unheard="0"]) .counts {
+    opacity: .5;
   }
   
   .expando {
