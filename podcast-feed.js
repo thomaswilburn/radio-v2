@@ -19,6 +19,7 @@ class PodcastFeed extends ElementBase {
     this.elements.renameButton.addEventListener("click", this.onClickRename);
     this.elements.searchButton.addEventListener("click", this.onClickSearch);
     this.elements.refreshButton.addEventListener("click", this.onClickRefresh);
+    this.elements.markHeardButton.addEventListener("click", this.onClickMarkHeard);
     this.addEventListener("episode-play", this.sendPlayRequest);
     app.on("refresh-all", this.load);
   }
@@ -32,6 +33,7 @@ class PodcastFeed extends ElementBase {
       "onClickRename",
       "onClickSearch",
       "onClickRefresh",
+      "onClickMarkHeard",
       "sendPlayRequest"
     ]
   }
@@ -146,6 +148,14 @@ class PodcastFeed extends ElementBase {
   onClickMore() {
     this.limit += this.pageSize;
     this.render();
+  }
+
+  async onClickMarkHeard() {
+    var metadata = await app.feeds.get(this.src);
+    metadata.listened = Date.now();
+    await app.feeds.set(this.src, metadata);
+    this.dataset.unheard = 0;
+    this.elements.unheard.innerHTML = 0;
   }
   
   async sendPlayRequest(e) {
