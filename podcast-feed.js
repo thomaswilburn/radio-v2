@@ -141,8 +141,9 @@ class PodcastFeed extends ElementBase {
   }
   
   onClickExpand() {
-    this.classList.toggle("expanded");
-    this.elements.expandButton.setAttribute("aria-pressed", this.classList.contains("expanded"));
+    var expanded = this.classList.toggle("expanded");
+    this.elements.expandButton.setAttribute("aria-pressed", expanded);
+    if (expanded) this.elements.title.scrollIntoView({ behavior: "smooth" });
   }
   
   onClickMore() {
