@@ -1,5 +1,6 @@
 import ElementBase from "./lib/element-base.js";
 import app from "./app.js";
+import Table from "./lib/storage.js";
 
 class AudioPlayer extends ElementBase {
   constructor() {
@@ -18,8 +19,15 @@ class AudioPlayer extends ElementBase {
     this.elements.scrubber.addEventListener("pointerup", this.onReleaseHandle);
     this.dragging = false;
     this.paused = true;
-    this.memory = null;
     this.setEnabled(false);
+    this.memory = new Table("audioplayer");
+    this.memory.get("playing").then(track => {
+      console.log(track);
+      if (!track) return;
+      this.elements.title.innerHTML = track.title;
+      this.audio.src = track.audio;
+      this.audio.currentTime = track.time;
+    });
   }
   
   static get boundMethods() {
@@ -65,6 +73,15 @@ class AudioPlayer extends ElementBase {
     this.elements.duration.innerHTML = this.formatTime(duration);
 
     app.fire("track-update", this.audio.src);
+
+    if (this.audio.src) {
+      this.memory.set("playing", {
+        audio: this.audio.src,
+        title: this.elements.title.innerHTML,
+        time,
+        duration
+      });
+    }
   }
 
   formatTime(t) {
@@ -98,7 +115,7 @@ class AudioPlayer extends ElementBase {
 
   async onClickStop() {
     await this.audio.pause();
-    this.audio.src = "";
+    this.audio.removeAttribute("src");
     this.setEnabled(false);
     this.elements.title.innerHTML = "";
     this.elements.current.innerHTML = this.formatTime(0);
@@ -106,6 +123,7 @@ class AudioPlayer extends ElementBase {
     this.elements.progress.style.width = "0"
     this.classList.remove("playable");
     app.fire("track-update", null);
+    this.memory.delete("playing");
   }
   
   onTouchHandle(e) {

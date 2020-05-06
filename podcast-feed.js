@@ -58,7 +58,13 @@ class PodcastFeed extends ElementBase {
     this.classList.add("loading");
     var metadata = this.metadata = await app.feeds.get(url);
     this.elements.title.innerHTML = metadata.renamed || metadata.title || this.elements.title.innerHTML;
-    var xml = await proxyXML(url);
+    try {
+      var xml = await proxyXML(url);
+    } catch (err) {
+      this.classList.remove("loading");
+      console.log("Unable to load feed: ", url);
+      return;
+    }
     var parsed = this.parseFeed(xml);
     // save title and current request time for later
     metadata.title = parsed.title;
@@ -130,6 +136,7 @@ class PodcastFeed extends ElementBase {
     metadata.renamed = prompt("New name?", metadata.renamed || metadata.title).trim();
     await app.feeds.set(this.src, metadata);
     this.elements.title.innerHTML = metadata.renamed || metadata.title;
+    this.feed.title = metadata.renamed;
   }
   
   onClickRefresh() {
