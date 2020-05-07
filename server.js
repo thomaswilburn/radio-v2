@@ -17,6 +17,7 @@ var fetch = function(address, output) {
   var parsed = new URL(address);
   var remote = parsed.protocol == "http:" ? http : https;
   var { host, pathname, search } = parsed;
+  console.log(`Fetching: ${host}/${pathname}`);
   var p = remote.get({
     host,
     path: pathname + search,

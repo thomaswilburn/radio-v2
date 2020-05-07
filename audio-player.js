@@ -22,8 +22,8 @@ class AudioPlayer extends ElementBase {
     this.setEnabled(false);
     this.memory = new Table("audioplayer");
     this.memory.get("playing").then(track => {
-      console.log(track);
       if (!track) return;
+      this.setEnabled(true);
       this.elements.title.innerHTML = track.title;
       this.audio.src = track.audio;
       this.audio.currentTime = track.time;
@@ -64,23 +64,16 @@ class AudioPlayer extends ElementBase {
     }
     
     var audio = this.audio;
-    var time = audio.currentTime;
-    var duration = audio.duration;
-    
-    var ratio = time / duration;
-    this.elements.progress.style.width = ratio * 100 + "%";
-    
-    this.elements.current.innerHTML = this.formatTime(time);
-    this.elements.duration.innerHTML = this.formatTime(duration);
+    this.updateTime();
 
-    app.fire("track-update", this.audio.src);
+    app.fire("track-update", audio.src);
 
-    if (this.audio.src) {
+    if (audio.src) {
       this.memory.set("playing", {
-        audio: this.audio.src,
+        audio: audio.src,
         title: this.elements.title.innerHTML,
-        time,
-        duration
+        time: audio.currentTime,
+        duration: audio.duration
       });
     }
   }
@@ -96,6 +89,14 @@ class AudioPlayer extends ElementBase {
       (minutes + "").padStart(2, "0"),
       (t + "").padStart(2, "0")
     ].join(":");
+  }
+  
+  updateTime(time = this.audio.currentTime, duration = this.audio.duration) {
+    var ratio = duration ? time / duration : 0;
+    this.elements.progress.style.width = ratio * 100 + "%";
+    
+    this.elements.current.innerHTML = this.formatTime(time);
+    this.elements.duration.innerHTML = this.formatTime(duration);
   }
   
   onAudioError() {
@@ -115,13 +116,11 @@ class AudioPlayer extends ElementBase {
   }
 
   async onClickStop() {
+    this.setEnabled(false);
     await this.audio.pause();
     this.audio.removeAttribute("src");
-    this.setEnabled(false);
     this.elements.title.innerHTML = "";
-    this.elements.current.innerHTML = this.formatTime(0);
-    this.elements.duration.innerHTML = this.formatTime(0);
-    this.elements.progress.style.width = "0"
+    this.updateTime(0, 0);
     this.classList.remove("playable");
     app.fire("track-update", null);
     this.memory.delete("playing");
@@ -142,8 +141,7 @@ class AudioPlayer extends ElementBase {
     if (d < 0) d = 0;
     if (d > 1) d = 1;
     var time = duration * d;
-    this.elements.progress.style.width = (d * 100) + "%";
-    this.elements.current.innerHTML = this.formatTime(time);
+    this.updateTime(time);
   }
   
   onReleaseHandle(e) {
