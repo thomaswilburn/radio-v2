@@ -52,10 +52,11 @@ class AudioPlayer extends ElementBase {
     this.elements.title.innerHTML = request.feed + " - " + request.title;
     this.audio.src = request.enclosure;
     this.audio.play();
+    this.setEnabled(true);
   }
   
   onAudioUpdate(e) {
-    this.setEnabled(true);
+    if (this.classList.contains("disabled")) return;
     if (e.type == "seeking") {
       this.elements.play.dataset.state = "seeking";
     } else {
