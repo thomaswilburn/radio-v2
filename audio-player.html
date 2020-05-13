@@ -74,13 +74,17 @@
     display: block;
     margin: 0 4px;
     padding: 4px 4px;
-    background: var(--accent);
+    background: var(--shaded);
     border: 1px solid var(--foreground);
     flex: 1;
     text-align: center;
     color: var(--foreground);
     font-size: 1.2rem;
     border-radius: 2px;
+  }
+
+  :host(.playable) .controls button {
+    background: var(--accent);
   }
   
   .controls button.left {
@@ -126,6 +130,7 @@
   }
   
   :host(.disabled) {
+    display: none;
     --accent: var(--border);
   }
   
