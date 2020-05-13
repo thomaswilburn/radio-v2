@@ -1,11 +1,17 @@
 <style>
+  @keyframes player-enter {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
   :host {
     position: relative;
     font-family: var(--ui-font);
     background: var(--shaded);
     padding: 16px;
     box-shadow: 0 -8px 16px rgba(0, 0, 0, .5);
-    border-top: 2px solid var(--background)
+    border-top: 2px solid var(--background);
+    animation: player-enter .3s ease;
   }
   
   .title {
