@@ -27,7 +27,7 @@
   }
   
   .progress-container {
-    height: 16px;
+    height: 24px;
     background: var(--background);
     position: relative;
     flex: 1;
@@ -35,21 +35,11 @@
   
   .progress {
     pointer-events: none;
-    background: var(--accent);
+    background: var(--foreground);
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-  }
-  
-  .handle {
-    position: absolute;
-    bottom: 0;
-    height: 120%;
-    width: 4px;
-    right: 0;
-    background: var(--foreground);
-    border-radius: 4px;
   }
   
   hr {
@@ -71,46 +61,47 @@
     display: flex;
     align-items: stretch;
     justify-content: center;
-    padding: 8px 0;
     margin: auto;
-    max-width: 320px;
+    padding-top: 12px;
   }
   
   .controls button {
     display: block;
-    margin: 0 4px;
-    padding: 4px 4px;
+    padding: 12px 4px;
     background: var(--shaded);
-    border: 1px solid var(--foreground);
+    border-color: var(--background);
+    border-width: 1px;
+    border-style: solid;
     flex: 1;
     text-align: center;
     color: var(--foreground);
     font-size: 1.2rem;
-    border-radius: 2px;
+    box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .4);
+    margin: 0 3px;
+  }
+
+  .controls .left {
+    margin-left: 0;
+  }
+
+  .controls .right {
+    margin-right: 0;
+  }
+
+  .controls hr {
+    margin: 0 3px;
   }
 
   :host(.playable) .controls button {
     background: var(--accent);
   }
   
-  .controls button.left {
-    border-radius: 20px 2px 2px 20px;
-  }
-  
-  .controls button.right {
-    border-radius: 2px 20px 20px 2px;
-  }
-  
-  .controls button.round {
-    border-radius: 20px;
-  }
-  
-  .controls [as=stop] {
+  .controls .stop {
     margin-left: 40px;
     font-size: 1.5rem;
   }
   
-  .controls [as=play] {
+  .controls .play {
     flex: 2;
   }
   
@@ -123,15 +114,15 @@
     display: none;
   }
   
-  [as=play][data-state="paused"] .play.icon {
+  .play[data-state="paused"] .play.icon {
     display: block;
   }
   
-  [as=play][data-state="playing"] .pause.icon {
+  .play[data-state="playing"] .pause.icon {
     display: block;
   }
   
-  [as=play][data-state="seeking"] .seek.icon {
+  .play[data-state="seeking"] .seek.icon {
     display: block;
   }
   
@@ -151,9 +142,7 @@
 <div class="track">
   <div class="row">
     <div class="progress-container" as="scrubber">
-      <div class="progress" as="progress">
-        <div class="handle"></div>
-      </div>
+      <div class="progress" as="progress"></div>
     </div>
 
     <hr>
@@ -166,10 +155,11 @@
 </div>
 
 <div class="controls">
-  <button as="rewind" class="left">
+  <button as="rewind" class="rewind left">
     <span>-A</span>
   </button>
-  <button as="play" data-state="seeking">
+
+  <button as="play" class="play" data-state="seeking">
     <svg width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none">
       <path class="play icon" d="M8,4 L28,16 L8,28 Z" fill="currentColor" />
       <g class="pause icon">
@@ -183,11 +173,14 @@
       </g>
     </svg>
   </button>
-  <button as="skip" class="right">
+
+  <button as="skip" class="skip right">
     <span>+A</span>
   </button>
   
-  <button as="stop" class="round">
-    &times;
+  <button as="stop" class="stop round">
+    <svg width="16" height="16">
+      <path stroke="currentColor" fill="none" d="M0,0 L16,16 M0,16 L16,0" stroke-width="2" />
+    </svg>
   </button>
 </div>
