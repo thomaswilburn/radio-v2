@@ -13,6 +13,7 @@ class AudioPlayer extends ElementBase {
     app.on("play-request", this.onPlayRequest);
     this.elements.play.addEventListener("click", this.onClickPlay);
     this.elements.skip.addEventListener("click", this.onClickSkip);
+    this.elements.rewind.addEventListener("click", this.onClickRewind);
     this.elements.stop.addEventListener("click", this.onClickStop);
     this.elements.scrubber.addEventListener("pointerdown", this.onTouchHandle);
     this.elements.scrubber.addEventListener("pointermove", this.onDragHandle);
@@ -37,6 +38,7 @@ class AudioPlayer extends ElementBase {
       "onAudioUpdate",
       "onClickPlay",
       "onClickSkip",
+      "onClickRewind",
       "onClickStop",
       "onTouchHandle",
       "onDragHandle",
@@ -113,6 +115,10 @@ class AudioPlayer extends ElementBase {
   
   onClickSkip() {
     this.audio.currentTime += 10;
+  }
+  
+  onClickRewind() {
+    this.audio.currentTime -= 10;
   }
 
   async onClickStop() {
