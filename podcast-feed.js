@@ -1,5 +1,5 @@
 import ElementBase from "./lib/element-base.js";
-import { $, matchData, proxyXML, removeCDATA } from "./lib/common.js";
+import { $, matchData, proxyXML, getXML, removeCDATA } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-episode.js";
 
@@ -11,6 +11,7 @@ class PodcastFeed extends ElementBase {
     this.offset = 0;
     this.limit = 10;
     this.pageSize = 10;
+    this.proxied = false;
     
     this.elements.expandButton.addEventListener("click", this.onClickExpand);
     this.elements.title.addEventListener("click", this.onClickExpand);
@@ -53,18 +54,33 @@ class PodcastFeed extends ElementBase {
         break;
     }
   }
+
+  async requestFeed(url) {
+    var response;
+    if (this.proxied) return proxyXML(url);
+    try {
+      response = await getXML(url);
+      console.log(`Successful CORS request for ${url}`);
+    } catch (err) {
+      console.log(`Direct request for ${url} failed, using proxy`);
+      this.proxied = true;
+      response = await proxyXML(url);
+    }
+    return response;
+  }
   
   async load(url = this.src) {
     this.classList.add("loading");
     var metadata = this.metadata = await app.feeds.get(url);
     this.elements.title.innerHTML = metadata.renamed || metadata.title || this.elements.title.innerHTML;
     try {
-      var xml = await proxyXML(url);
+      var xml = await this.requestFeed(url);
     } catch (err) {
       this.classList.remove("loading");
       console.log("Unable to load feed: ", url);
       return;
     }
+    this.classList.remove("loading");
     var parsed = this.parseFeed(xml);
     // save title and current request time for later
     metadata.title = parsed.title;
@@ -81,7 +97,6 @@ class PodcastFeed extends ElementBase {
     // render episode items
     await window.customElements.whenDefined("podcast-episode");
     this.render();
-    this.classList.remove("loading");
   }
   
   getViewable() {
