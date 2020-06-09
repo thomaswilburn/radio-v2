@@ -19,7 +19,10 @@ import "./audio-player.js";
 import "./podcast-list.js";
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./lib/service-worker.js").then(registration => console.log(registration));
+  navigator.serviceWorker.register("./lib/service-worker.js").then(registration => {
+    console.log(registration);
+    registration.update();
+  });
 }
     </script>
   </body>
