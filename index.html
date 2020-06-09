@@ -19,9 +19,9 @@ import "./audio-player.js";
 import "./podcast-list.js";
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./lib/service-worker.js").then(registration => {
+  navigator.serviceWorker.register("./service-worker.js").then(async registration => {
     console.log(registration);
-    registration.update();
+    await registration.update();
   });
 }
     </script>
