@@ -23,6 +23,7 @@ class PodcastFeed extends ElementBase {
     this.elements.markHeardButton.addEventListener("click", this.onClickMarkHeard);
     this.addEventListener("episode-play", this.sendPlayRequest);
     app.on("refresh-all", this.load);
+    app.on("clear-all", this.onClickMarkHeard);
   }
   
   static get boundMethods() {

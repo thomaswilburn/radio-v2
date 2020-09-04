@@ -37,7 +37,7 @@ body {
 podcast-list {
   display: block;
   flex: 1;
-  overflow-y: scroll;
+/*   overflow-y: scroll; */
 }
 
 audio-player {

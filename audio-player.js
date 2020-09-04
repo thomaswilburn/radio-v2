@@ -6,6 +6,7 @@ class AudioPlayer extends ElementBase {
   constructor() {
     super();
     this.audio = document.createElement("audio");
+    this.audio.setAttribute("preload", "auto");
     this.audio.addEventListener("timeupdate", this.onAudioUpdate);
     this.audio.addEventListener("seeking", this.onAudioUpdate);
     this.audio.addEventListener("error", this.onAudioError);
@@ -20,6 +21,7 @@ class AudioPlayer extends ElementBase {
     this.elements.scrubber.addEventListener("pointerup", this.onReleaseHandle);
     this.dragging = false;
     this.paused = true;
+    this.errorState = false;
     this.setEnabled(false);
     this.memory = new Table("audioplayer");
     this.memory.get("playing").then(track => {
@@ -70,7 +72,8 @@ class AudioPlayer extends ElementBase {
 
     app.fire("track-update", audio.src);
 
-    if (audio.src) {
+    if (audio.src && !audio.paused) {
+      this.errorState = false;
       this.memory.set("playing", {
         audio: audio.src,
         title: this.elements.title.innerHTML,
@@ -101,8 +104,20 @@ class AudioPlayer extends ElementBase {
     this.elements.duration.innerHTML = this.formatTime(duration);
   }
   
-  onAudioError() {
-    
+  onAudioError(e) {
+    console.log(e);
+    if (this.errorState) return;
+    this.errorState = true;
+    // get last valid location
+    var i = this.audio.played.length - 1;
+    var played = this.audio.played.end(i);
+    var memory = this.memory.get("playing");
+    if (!memory) return;
+    var { time } = memory;
+    var src = this.audio.src;
+    this.audio.src = src;
+    this.audio.currentTime = time;
+    this.audio.play();
   }
   
   onClickPlay() {
