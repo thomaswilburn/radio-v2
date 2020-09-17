@@ -14,6 +14,7 @@ class PodcastFeed extends ElementBase {
     this.proxied = false;
     
     this.elements.expandButton.addEventListener("click", this.onClickExpand);
+    this.elements.playLatest.addEventListener("click", this.onClickPlayLatest);
     this.elements.title.addEventListener("click", this.onClickExpand);
     this.elements.showMoreButton.addEventListener("click", this.onClickMore);
     this.elements.unsubscribeButton.addEventListener("click", this.onClickUnsubscribe);
@@ -30,6 +31,7 @@ class PodcastFeed extends ElementBase {
     return [
       "load",
       "onClickExpand",
+      "onClickPlayLatest",
       "onClickMore",
       "onClickUnsubscribe",
       "onClickRename",
@@ -139,6 +141,11 @@ class PodcastFeed extends ElementBase {
     });
     parsed.title = $.one("channel title", document).textContent.trim();
     return parsed;
+  }
+
+  onClickPlayLatest() {
+    var episode = this.elements.items.querySelector("podcast-episode");
+    episode.onClickPlay();
   }
   
   onClickSearch() {

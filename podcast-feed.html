@@ -54,16 +54,25 @@
   :host([data-unheard="0"]) .counts {
     opacity: .5;
   }
+
+  .counts {
+    margin-right: 8px;
+  }
+
+  .primary button {
+    background: transparent;
+    padding: 4px;
+    color: inherit;
+    font-size: 2rem;
+    border: none;
+    padding: 4px;
+    font-weight: normal;
+  }
   
   .expando {
     transform-origin: center;
     transform: rotateX(180deg);
     transition: transform .4s ease;
-    background: transparent;
-    border: none;
-    color: inherit;
-    padding: 4px 16px;
-    font-size: 2rem;
   }
   
   .expando[aria-pressed="true"] {
@@ -121,6 +130,13 @@
     <div class="counts">
       (<span as="unheard"></span> / <span as="total"></span>)
     </div>
+    <button
+      aria-label="play latest"
+      as="playLatest"
+      class="play-latest"
+    >
+      &veeeq;
+    </button>
     <button
       aria-label="expand feed"
       aria-pressed="false"
