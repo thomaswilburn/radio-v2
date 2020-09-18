@@ -9,8 +9,8 @@ class AudioPlayer extends ElementBase {
     this.audio.setAttribute("preload", "auto");
     this.audio.addEventListener("timeupdate", this.onAudioUpdate);
     this.audio.addEventListener("seeking", this.onAudioUpdate);
-    this.audio.addEventListener("error", this.onAudioError);
-    this.audio.addEventListener("canplay", () => this.classList.add("playable"));
+    // this.audio.addEventListener("error", this.onAudioError);
+    this.audio.addEventListener("loadedmetadata", () => this.classList.add("playable"));
     app.on("play-request", this.onPlayRequest);
     this.elements.play.addEventListener("click", this.onClickPlay);
     this.elements.skip.addEventListener("click", this.onClickSkip);
@@ -28,9 +28,14 @@ class AudioPlayer extends ElementBase {
       if (!track) return;
       this.setEnabled(true);
       this.elements.title.innerHTML = track.title;
-      this.audio.src = track.audio;
+      this.audio.src = track.src;
       this.audio.currentTime = track.time;
+      this.setMediaSession(track.episode, track.feed, track.artwork);
     });
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.setActionHandler("seekforward", this.onClickSkip);
+      navigator.mediaSession.setActionHandler("seekbackward", this.onClickRewind);
+    }
   }
   
   static get boundMethods() {
@@ -51,12 +56,35 @@ class AudioPlayer extends ElementBase {
   setEnabled(state) {
     this.classList.toggle("disabled", !state);
   }
+
+  setMediaSession(title, feed, artwork) {
+    if ("mediaSession" in navigator) {
+      var metadata = {
+        title,
+        artist: feed
+      };
+      if (artwork) {
+        metadata.artwork = [{ src: artwork }];
+      }
+      navigator.mediaSession.metadata = new MediaMetadata(metadata);
+    }
+  }
   
   onPlayRequest(request) {
-    this.elements.title.innerHTML = request.feed + " - " + request.title;
+    var titleString = request.feed + " - " + request.title;
+    this.elements.title.innerHTML = titleString;
     this.audio.src = request.enclosure;
     this.audio.play();
     this.setEnabled(true);
+    this.setMediaSession(request.title, request.feed, request.artwork);
+    this.memorize({
+      title: titleString,
+      episode: request.title,
+      feed: request.feed,
+      src: request.enclosure,
+      artwork: request.artwork,
+      time: 0
+    });
   }
   
   onAudioUpdate(e) {
@@ -74,9 +102,7 @@ class AudioPlayer extends ElementBase {
 
     if (audio.src && !audio.paused) {
       this.errorState = false;
-      this.memory.set("playing", {
-        audio: audio.src,
-        title: this.elements.title.innerHTML,
+      this.memorize({
         time: audio.currentTime,
         duration: audio.duration
       });
@@ -94,6 +120,20 @@ class AudioPlayer extends ElementBase {
       (minutes + "").padStart(2, "0"),
       (t + "").padStart(2, "0")
     ].join(":");
+  }
+
+  async memorize(update) {
+    if (!update) {
+      return this.memory.delete("playing");
+    }
+    var playing = await this.memory.get("playing");
+    if (!update.audio) {
+      update = Object.assign({}, playing, update);
+    }
+    if ("duration" in update && !update.duration) {
+      return;
+    }
+    await this.memory.set("playing", update);
   }
   
   updateTime(time = this.audio.currentTime, duration = this.audio.duration) {

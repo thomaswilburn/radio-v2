@@ -127,6 +127,8 @@ class PodcastFeed extends ElementBase {
   
   parseFeed(document) {
     var parsed = {};
+    var artwork = $.one("image url", document);
+    artwork = artwork ? artwork.textContent.trim() : null;
     parsed.items = $("item", document).map(function(item) {
       var result = {};
       ["pubDate", "title", "description", "link"].forEach(function(k) {
@@ -137,6 +139,8 @@ class PodcastFeed extends ElementBase {
       if (!enclosure) return null;
       result.enclosure = enclosure.getAttribute("url");
       result.date = new Date(result.pubDate ? Date.parse(result.pubDate) : 0);
+      var trackArt = item.querySelector("img");
+      result.artwork = trackArt ? trackArt.getAttribute("href") : artwork;
       return result;
     });
     parsed.title = $.one("channel title", document).textContent.trim();
