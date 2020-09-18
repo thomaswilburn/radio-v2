@@ -179,6 +179,7 @@ class AudioPlayer extends ElementBase {
   async onClickStop() {
     this.setEnabled(false);
     await this.audio.pause();
+    this.audio.src = "";
     this.audio.removeAttribute("src");
     this.elements.title.innerHTML = "";
     this.updateTime(0, 0);
