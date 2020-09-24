@@ -139,7 +139,7 @@ class PodcastFeed extends ElementBase {
       if (!enclosure) return null;
       result.enclosure = enclosure.getAttribute("url");
       result.date = new Date(result.pubDate ? Date.parse(result.pubDate) : 0);
-      var trackArt = item.querySelector("img");
+      var trackArt = item.getElementsByTagName("itunes:image")[0];
       result.artwork = trackArt ? trackArt.getAttribute("href") : artwork;
       return result;
     });
