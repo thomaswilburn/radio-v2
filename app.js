@@ -29,7 +29,7 @@ class Radio extends Emitter {
   async syncUp() {
     var feeds = await this.feeds.getAll();
     var body = JSON.stringify(feeds.sort((a, b) => a.subscribed - b.subscribed).map(f => f.url));
-    var post = await fetch("https://fetch-key-repeat.glitch.me/new", {
+    var post = await fetch("/fetch-key-repeat/new", {
       method: "POST",
       body,
       mode: "cors"
@@ -44,7 +44,7 @@ class Radio extends Emitter {
   async syncDown() {
     var key = prompt("Sync key?");
     if (!key) return;
-    var request = await fetch(`https://fetch-key-repeat.glitch.me/${key}`);
+    var request = await fetch(`/fetch-key-repeat/${key}`);
     var json = await request.json();
     if (!json instanceof Array) return alert("Unable to parse feed array!");
     for (var feed of json) {
