@@ -1,0 +1,23 @@
+<!doctype html>
+<script type="module">
+import Table from "./lib/storage.js";
+
+var handleShare = async function() {
+  var search = new URLSearchParams(window.location.search);
+  var params = Object.fromEntries(search);
+  var url = params.url || params.text || params.title;
+  if (url && url.match(/^https?:\/\//i)) {
+    var confirmed = window.confirm(`Add feed at "${url}"?`);
+    if (confirmed) {
+      var feeds = new Table("feeds");
+      await feeds.set(url, { url, subscribed: Date.now() });
+    }
+  } else {
+    window.alert(`Shared data "${url}" doesn't seem to be a valid URL`);
+  }
+  // redirect to the actual app
+  window.location = "./";
+};
+
+window.addEventListener("DOMContentLoaded", handleShare);
+</script>
