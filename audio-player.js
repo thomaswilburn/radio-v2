@@ -74,6 +74,7 @@ class AudioPlayer extends ElementBase {
     var titleString = request.feed + " - " + request.title;
     this.elements.title.innerHTML = titleString;
     this.audio.src = request.enclosure;
+    this.audio.currentTime = 0;
     this.audio.play();
     this.setEnabled(true);
     this.setMediaSession(request.title, request.feed, request.artwork);
