@@ -23,6 +23,7 @@ class AudioPlayer extends ElementBase {
     this.paused = true;
     this.errorState = false;
     this.setEnabled(false);
+    this.saveCounter = 0;
     this.memory = new Table("audioplayer");
     this.memory.get("playing").then(track => {
       if (!track) return;
@@ -103,10 +104,13 @@ class AudioPlayer extends ElementBase {
 
     if (audio.src && !audio.paused) {
       this.errorState = false;
-      this.memorize({
-        time: audio.currentTime,
-        duration: audio.duration
-      });
+      if (this.saveCounter % 10 == 0) {
+        this.memorize({
+          time: audio.currentTime,
+          duration: audio.duration
+        });
+      }
+      this.saveCounter++;
     }
   }
 
