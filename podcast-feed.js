@@ -148,7 +148,7 @@ class PodcastFeed extends ElementBase {
   }
 
   onClickPlayLatest() {
-    var episode = this.elements.items.querySelector("podcast-episode");
+    var episode = this.querySelector("podcast-episode");
     episode.onClickPlay();
   }
   
