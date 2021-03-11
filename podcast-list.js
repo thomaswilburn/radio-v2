@@ -32,7 +32,7 @@ class PodcastList extends ElementBase {
     }
     feeds = feeds.sort((a, b) => a.subscribed - b.subscribed);
     await customElements.whenDefined("podcast-feed");
-    matchData(this.shadowRoot, feeds, "url", function(item) {
+    matchData(this, feeds, "url", function(item) {
       var list = document.createElement("podcast-feed");
       list.src = item.url;
       return list;
@@ -53,6 +53,10 @@ class PodcastList extends ElementBase {
     if (!url) return;
     var subscribed = Date.now();
     await app.feeds.set(url, { url, subscribed });
+  }
+
+  static get template() {
+    return `<slot></slot>`;
   }
 }
 

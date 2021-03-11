@@ -114,7 +114,7 @@ class PodcastFeed extends ElementBase {
     this.classList.toggle("searching", this.query);
     var items = this.getViewable();
     this.elements.showMoreButton.style.display = items.length == this.feed.items.length ? "none" : "";
-    matchData(this.elements.items, items, "enclosure", function(item) {
+    matchData(this, items, "enclosure", function(item) {
       var episode = document.createElement("podcast-episode");
       episode.setAttribute("src", item.enclosure);
       episode.innerHTML = `
@@ -160,7 +160,9 @@ class PodcastFeed extends ElementBase {
   
   async onClickRename() {
     var metadata = await app.feeds.get(this.src);
-    metadata.renamed = prompt("New name?", metadata.renamed || metadata.title).trim();
+    var name = prompt("New name?", metadata.renamed || metadata.title)
+    if (!name) return;
+    metadata.renamed = name.trim();
     await app.feeds.set(this.src, metadata);
     this.elements.title.innerHTML = metadata.renamed || metadata.title;
     this.feed.title = metadata.renamed;
