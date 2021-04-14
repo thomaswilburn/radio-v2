@@ -30,6 +30,7 @@ class AudioPlayer extends ElementBase {
       this.setEnabled(true);
       this.elements.title.innerHTML = track.feed + " - " + track.credit;
       this.elements.episode.innerHTML = track.episode;
+      this.elements.artwork.src = track.artwork;
       this.audio.src = track.src;
       this.audio.currentTime = track.time;
       this.setMediaSession(track.episode, track.feed, track.artwork, track.credit);
@@ -77,6 +78,7 @@ class AudioPlayer extends ElementBase {
     var titleString = request.feed + " - " + request.credit;
     this.elements.title.innerHTML = titleString;
     this.elements.episode.innerHTML = request.title;
+    this.elements.artwork.src = request.artwork;
     this.audio.src = request.enclosure;
     this.audio.currentTime = 0;
     this.audio.play();

@@ -13,12 +13,36 @@
     border-top: 2px solid var(--background);
     animation: player-enter .3s ease;
   }
+
+  .metadata {
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+
+  .metadata img {
+    background: gray;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .metadata .titles {
+    flex: 1;
+    min-width: 0;
+    padding-left: 8px;
+  }
   
   .title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-bottom: 8px;
+  }
+
+  .feed.title {
+    font-size: 80%;
   }
   
   .track .row {
@@ -137,8 +161,13 @@
     opacity: .5;
   }
 </style>
-<div class="title" as="title"></div>
-<div class="episode" as="episode"></div>
+<div class="metadata">
+  <img as="artwork">
+  <div class="titles">
+    <div class="feed title" as="title"></div>
+    <div class="episode title" as="episode"></div>
+  </div>
+</div>
 
 <div class="track">
   <div class="row">
