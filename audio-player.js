@@ -87,7 +87,7 @@ class AudioPlayer extends ElementBase {
     this.audio.play();
     this.setEnabled(true);
     this.memorize({
-      episode: request.title,
+      title: request.title,
       feed: request.feed,
       src: request.enclosure,
       artwork: request.artwork,
