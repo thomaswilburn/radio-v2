@@ -28,9 +28,7 @@ class AudioPlayer extends ElementBase {
     this.memory.get("playing").then(track => {
       if (!track) return;
       this.setEnabled(true);
-      this.elements.title.innerHTML = track.feed + " - " + track.credit;
-      this.elements.episode.innerHTML = track.episode;
-      this.elements.artwork.src = track.artwork;
+      this.setMetadataDisplay(track);
       this.audio.src = track.src;
       this.audio.currentTime = track.time;
       this.setMediaSession(track.episode, track.feed, track.artwork, track.credit);
@@ -73,12 +71,17 @@ class AudioPlayer extends ElementBase {
       navigator.mediaSession.metadata = new MediaMetadata(metadata);
     }
   }
+
+  setMetadataDisplay(podcast) {
+    var titleString = podcast.feed + " - " + podcast.credit;
+    this.elements.title.innerHTML = titleString;
+    this.elements.episode.innerHTML = podcast.title;
+    this.elements.artwork.src = "";
+    this.elements.artwork.src = podcast.artwork;
+  }
   
   onPlayRequest(request) {
-    var titleString = request.feed + " - " + request.credit;
-    this.elements.title.innerHTML = titleString;
-    this.elements.episode.innerHTML = request.title;
-    this.elements.artwork.src = request.artwork;
+    this.setMetadataDisplay(podcast);
     this.audio.src = request.enclosure;
     this.audio.currentTime = 0;
     this.audio.play();
