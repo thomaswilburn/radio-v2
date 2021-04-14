@@ -28,7 +28,7 @@ class AudioPlayer extends ElementBase {
     this.memory.get("playing").then(track => {
       if (!track) return;
       this.setEnabled(true);
-      this.elements.title.innerHTML = track.feed;
+      this.elements.title.innerHTML = track.feed + " - " + track.credit;
       this.elements.episode.innerHTML = track.episode;
       this.audio.src = track.src;
       this.audio.currentTime = track.time;
