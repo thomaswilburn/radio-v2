@@ -88,6 +88,8 @@ class PodcastFeed extends ElementBase {
     // save title and current request time for later
     metadata.title = parsed.title;
     metadata.requested = Date.now();
+    metadata.latest = parsed.latest;
+    metadata.credit = parsed.credit;
     app.feeds.set(url, metadata);
     // update UI
     this.elements.title.innerHTML = metadata.renamed || metadata.title;
@@ -95,8 +97,6 @@ class PodcastFeed extends ElementBase {
     var listened = metadata.listened || 0;
     var unheard = this.feed.items.filter(f => f.date > listened).length;
     this.dataset.unheard = unheard;
-    this.elements.unheard.innerHTML = unheard;
-    this.elements.total.innerHTML = this.feed.items.length;
     // render episode items
     await window.customElements.whenDefined("podcast-episode");
     this.render();
@@ -144,6 +144,11 @@ class PodcastFeed extends ElementBase {
       return result;
     });
     parsed.title = $.one("channel title", document).textContent.trim();
+    parsed.latest = Math.max(...parsed.items.map(i => i.date));
+    var credit = document.getElementsByTagName("itunes:author")[0] ||
+      document.getElementsByTagName("media:credit")[0] ||
+      $.one("author", document) || null;
+    parsed.credit = credit ? credit.textContent.trim() : "";
     return parsed;
   }
 
@@ -200,12 +205,12 @@ class PodcastFeed extends ElementBase {
     var episode = this.feed.items.find(e => e.enclosure == url);
     app.fire("play-request", {
       ...episode,
-      feed: this.feed.title
+      feed: this.feed.title,
+      credit: this.feed.credit
     });
     var metadata = await app.feeds.get(this.src);
     metadata.listened = Date.now();
     app.feeds.set(this.src, metadata);
-    this.elements.unheard.innerHTML = 0;
     this.dataset.unheard = 0;
   }
 }

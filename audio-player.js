@@ -28,10 +28,11 @@ class AudioPlayer extends ElementBase {
     this.memory.get("playing").then(track => {
       if (!track) return;
       this.setEnabled(true);
-      this.elements.title.innerHTML = track.title;
+      this.elements.title.innerHTML = track.feed;
+      this.elements.episode.innerHTML = track.episode;
       this.audio.src = track.src;
       this.audio.currentTime = track.time;
-      this.setMediaSession(track.episode, track.feed, track.artwork);
+      this.setMediaSession(track.episode, track.feed, track.artwork, track.credit);
     });
     if ("mediaSession" in navigator) {
       navigator.mediaSession.setActionHandler("seekforward", this.onClickSkip);
@@ -58,11 +59,12 @@ class AudioPlayer extends ElementBase {
     this.classList.toggle("disabled", !state);
   }
 
-  setMediaSession(title, feed, artwork) {
+  setMediaSession(title, feed, artwork, credit) {
     if ("mediaSession" in navigator) {
       var metadata = {
         title,
-        artist: feed
+        artist: credit,
+        album: feed
       };
       if (artwork) {
         metadata.artwork = [{ src: artwork }];
@@ -72,19 +74,20 @@ class AudioPlayer extends ElementBase {
   }
   
   onPlayRequest(request) {
-    var titleString = request.feed + " - " + request.title;
+    var titleString = request.feed + " - " + request.credit;
     this.elements.title.innerHTML = titleString;
+    this.elements.episode.innerHTML = request.title;
     this.audio.src = request.enclosure;
     this.audio.currentTime = 0;
     this.audio.play();
     this.setEnabled(true);
     this.setMediaSession(request.title, request.feed, request.artwork);
     this.memorize({
-      title: titleString,
       episode: request.title,
       feed: request.feed,
       src: request.enclosure,
       artwork: request.artwork,
+      credit: request.credit,
       time: 0
     });
   }

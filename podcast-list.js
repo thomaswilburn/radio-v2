@@ -30,7 +30,12 @@ class PodcastList extends ElementBase {
         await app.feeds.set(f.url, f);
       }
     }
-    feeds = feeds.sort((a, b) => a.subscribed - b.subscribed);
+    feeds = feeds.sort(function(a, b) {
+      if (a.latest || b.latest) {
+        return (b.latest || 0) - (a.latest || 0);
+      }
+      return a.subscribed - b.subscribed;
+    });
     await customElements.whenDefined("podcast-feed");
     matchData(this, feeds, "url", function(item) {
       var list = document.createElement("podcast-feed");

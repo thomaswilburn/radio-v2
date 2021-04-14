@@ -46,13 +46,17 @@
   :host(.loading) .load-spinner {
     display: block;
   }
-  
-  :host(.loading) .counts {
+
+  .play-latest {
+    display: block;
+  }
+
+  :host(.loading) .play-latest {
     display: none;
   }
 
-  :host([data-unheard="0"]) .counts {
-    opacity: .5;
+  :host([data-unheard="0"]) .play-latest {
+    display: none;
   }
 
   .counts {
@@ -127,15 +131,12 @@
   <div class="primary">
     <div as="title">Loading...</div>
     <div class="load-spinner">&#9836;</div>
-    <div class="counts">
-      (<span as="unheard"></span> / <span as="total"></span>)
-    </div>
     <button
       aria-label="play latest"
       as="playLatest"
       class="play-latest"
     >
-      &veeeq;
+      𝄢
     </button>
     <button
       aria-label="expand feed"
