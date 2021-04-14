@@ -31,7 +31,6 @@ class AudioPlayer extends ElementBase {
       this.setMetadataDisplay(track);
       this.audio.src = track.src;
       this.audio.currentTime = track.time;
-      this.setMediaSession(track.episode, track.feed, track.artwork, track.credit);
     });
     if ("mediaSession" in navigator) {
       navigator.mediaSession.setActionHandler("seekforward", this.onClickSkip);
@@ -78,6 +77,7 @@ class AudioPlayer extends ElementBase {
     this.elements.episode.innerHTML = podcast.title;
     this.elements.artwork.src = "";
     this.elements.artwork.src = podcast.artwork;
+    this.setMediaSession(podcast.title, podcast.feed, podcast.artwork, podcast.credit);
   }
   
   onPlayRequest(request) {
@@ -86,7 +86,6 @@ class AudioPlayer extends ElementBase {
     this.audio.currentTime = 0;
     this.audio.play();
     this.setEnabled(true);
-    this.setMediaSession(request.title, request.feed, request.artwork);
     this.memorize({
       episode: request.title,
       feed: request.feed,
