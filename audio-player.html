@@ -28,6 +28,11 @@
     display: block;
   }
 
+  .metadata img:not([src]),
+  .metadata img[src=""] {
+    display: none;
+  }
+
   .metadata .titles {
     flex: 1;
     min-width: 0;
