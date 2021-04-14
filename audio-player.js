@@ -81,7 +81,7 @@ class AudioPlayer extends ElementBase {
   }
   
   onPlayRequest(request) {
-    this.setMetadataDisplay(podcast);
+    this.setMetadataDisplay(request);
     this.audio.src = request.enclosure;
     this.audio.currentTime = 0;
     this.audio.play();
