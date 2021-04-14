@@ -23,8 +23,6 @@ class PodcastFeed extends ElementBase {
     this.elements.refreshButton.addEventListener("click", this.onClickRefresh);
     this.elements.markHeardButton.addEventListener("click", this.onClickMarkHeard);
     this.addEventListener("episode-play", this.sendPlayRequest);
-    app.on("refresh-all", this.load);
-    app.on("clear-all", this.onClickMarkHeard);
   }
   
   static get boundMethods() {
@@ -40,6 +38,16 @@ class PodcastFeed extends ElementBase {
       "onClickMarkHeard",
       "sendPlayRequest"
     ]
+  }
+
+  connectedCallback() {
+    app.on("refresh-all", this.load);
+    app.on("clear-all", this.onClickMarkHeard);
+  }
+
+  connectedCallback() {
+    app.off("refresh-all", this.load);
+    app.off("clear-all", this.onClickMarkHeard);
   }
   
   static get observedAttributes() {

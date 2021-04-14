@@ -7,15 +7,25 @@ class PodcastEpisode extends ElementBase {
     this.elements.expandButton.addEventListener("click", this.onExpand);
     this.elements.playButton.addEventListener("click", this.onClickPlay);
     this.elements.title.addEventListener("click", this.onExpand);
-    app.on("track-update", url => {
-      this.classList.toggle("playing", url == this.dataset.key);
-    });
+  }
+
+  connectedCallback() {
+    app.on("track-update", this.onTrackUpdate);
+  }
+
+  disconnectedCallback() {
+    app.off("track-update", this.onTrackUpdate);
+  }
+
+  onTrackUpdate(url) {
+    this.classList.toggle("playing", url == this.dataset.key);
   }
   
   static get boundMethods() {
     return [
       "onExpand",
-      "onClickPlay"
+      "onClickPlay",
+      "onTrackUpdate"
     ]
   }
   

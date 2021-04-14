@@ -7,8 +7,6 @@ class PodcastList extends ElementBase {
   constructor() {
     super();
     this.load().then(() => app.feeds.on("change", this.load));
-    app.on("podcast-unsubscribe", this.onUnsubRequest);
-    app.on("podcast-subscribe", this.onSubscribeRequest);
   }
   
   static get boundMethods() {
@@ -16,6 +14,16 @@ class PodcastList extends ElementBase {
       "load",
       "onUnsubRequest"
     ];
+  }
+
+  connectedCallback() {
+    app.on("podcast-unsubscribe", this.onUnsubRequest);
+    app.on("podcast-subscribe", this.onSubscribeRequest);
+  }
+
+  disconnectedCallback() {
+    app.off("podcast-unsubscribe", this.onUnsubRequest);
+    app.off("podcast-subscribe", this.onSubscribeRequest);
   }
   
   async load() {
