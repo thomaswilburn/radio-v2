@@ -45,7 +45,7 @@ class PodcastFeed extends ElementBase {
     app.on("clear-all", this.onClickMarkHeard);
   }
 
-  connectedCallback() {
+  disconnectedCallback() {
     app.off("refresh-all", this.load);
     app.off("clear-all", this.onClickMarkHeard);
   }
