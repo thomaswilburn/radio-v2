@@ -2,6 +2,7 @@ import ElementBase from "./lib/element-base.js";
 import { matchData } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-feed.js";
+import { measure, flip } from "./lib/flip.js";
 
 class PodcastList extends ElementBase {
   constructor() {
@@ -45,11 +46,13 @@ class PodcastList extends ElementBase {
       return a.subscribed - b.subscribed;
     });
     await customElements.whenDefined("podcast-feed");
+    measure(this.children);
     matchData(this, feeds, "url", function(item) {
       var list = document.createElement("podcast-feed");
       list.src = item.url;
       return list;
     });
+    flip(this.children);
   }
   
   async onUnsubRequest(data) {
