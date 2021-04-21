@@ -205,7 +205,6 @@ class PodcastFeed extends ElementBase {
     metadata.listened = Date.now();
     await app.feeds.set(this.src, metadata);
     this.dataset.unheard = 0;
-    this.elements.unheard.innerHTML = 0;
   }
   
   async sendPlayRequest(e) {
