@@ -3,6 +3,20 @@ import app from "./app.js";
 import Table from "./lib/storage.js";
 
 class AudioPlayer extends ElementBase {
+
+  static boundMethods = [
+    "onPlayRequest",
+    "onAudioError",
+    "onAudioUpdate",
+    "onClickPlay",
+    "onClickSkip",
+    "onClickRewind",
+    "onClickStop",
+    "onTouchHandle",
+    "onDragHandle",
+    "onReleaseHandle"
+  ] 
+
   constructor() {
     super();
     this.audio = document.createElement("audio");
@@ -36,21 +50,6 @@ class AudioPlayer extends ElementBase {
       navigator.mediaSession.setActionHandler("seekforward", this.onClickSkip);
       navigator.mediaSession.setActionHandler("seekbackward", this.onClickRewind);
     }
-  }
-  
-  static get boundMethods() {
-    return [
-      "onPlayRequest",
-      "onAudioError",
-      "onAudioUpdate",
-      "onClickPlay",
-      "onClickSkip",
-      "onClickRewind",
-      "onClickStop",
-      "onTouchHandle",
-      "onDragHandle",
-      "onReleaseHandle"
-    ]
   }
   
   setEnabled(state) {

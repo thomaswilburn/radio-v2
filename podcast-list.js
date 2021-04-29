@@ -5,16 +5,15 @@ import "./podcast-feed.js";
 import { measure, flip } from "./lib/flip.js";
 
 class PodcastList extends ElementBase {
+  
+  static boundMethods = [
+    "load",
+    "onUnsubRequest"
+  ]
+
   constructor() {
     super();
     this.load().then(() => app.feeds.on("change", this.load));
-  }
-  
-  static get boundMethods() {
-    return [
-      "load",
-      "onUnsubRequest"
-    ];
   }
 
   connectedCallback() {
@@ -71,9 +70,7 @@ class PodcastList extends ElementBase {
     await app.feeds.set(url, { url, subscribed });
   }
 
-  static get template() {
-    return `<slot></slot>`;
-  }
+  static template = `<slot></slot>`
 }
 
 PodcastList.define("podcast-list");

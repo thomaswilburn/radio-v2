@@ -2,6 +2,13 @@ import ElementBase from "./lib/element-base.js";
 import app from "./app.js";
 
 class PodcastEpisode extends ElementBase {
+  
+  static boundMethods = [
+    "onExpand",
+    "onClickPlay",
+    "onTrackUpdate"
+  ]
+
   constructor() {
     super();
     this.elements.expandButton.addEventListener("click", this.onExpand);
@@ -20,15 +27,7 @@ class PodcastEpisode extends ElementBase {
   onTrackUpdate(url) {
     this.classList.toggle("playing", url == this.dataset.key);
   }
-  
-  static get boundMethods() {
-    return [
-      "onExpand",
-      "onClickPlay",
-      "onTrackUpdate"
-    ]
-  }
-  
+
   onExpand() {
     this.classList.toggle("expanded");
     this.elements.expandButton.setAttribute("aria-pressed", this.classList.contains("expanded"));

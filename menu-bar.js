@@ -2,15 +2,12 @@ import ElementBase from "./lib/element-base.js";
 import app from "./app.js";
 
 class MenuBar extends ElementBase {
+  
+  static boundMethods = [ "onMenu" ]
+
   constructor() {
     super();
     this.elements.menu.addEventListener("change", this.onMenu);
-  }
-  
-  static get boundMethods() {
-    return [
-      "onMenu"
-    ]
   }
   
   onMenu() {

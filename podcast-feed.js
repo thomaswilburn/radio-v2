@@ -4,6 +4,20 @@ import app from "./app.js";
 import "./podcast-episode.js";
 
 class PodcastFeed extends ElementBase {
+
+  static boundMethods = [
+    "load",
+    "onClickExpand",
+    "onClickPlayLatest",
+    "onClickMore",
+    "onClickUnsubscribe",
+    "onClickRename",
+    "onClickSearch",
+    "onClickRefresh",
+    "onClickMarkHeard",
+    "sendPlayRequest"
+  ]
+
   constructor() {
     super();
     this.feed = null;
@@ -25,21 +39,6 @@ class PodcastFeed extends ElementBase {
     this.addEventListener("episode-play", this.sendPlayRequest);
   }
   
-  static get boundMethods() {
-    return [
-      "load",
-      "onClickExpand",
-      "onClickPlayLatest",
-      "onClickMore",
-      "onClickUnsubscribe",
-      "onClickRename",
-      "onClickSearch",
-      "onClickRefresh",
-      "onClickMarkHeard",
-      "sendPlayRequest"
-    ]
-  }
-
   connectedCallback() {
     app.on("refresh-all", this.load);
     app.on("clear-all", this.onClickMarkHeard);
@@ -50,13 +49,8 @@ class PodcastFeed extends ElementBase {
     app.off("clear-all", this.onClickMarkHeard);
   }
   
-  static get observedAttributes() {
-    return ["src"];
-  }
-  
-  static get mirroredProps() {
-    return ["src"];
-  }
+  static observedAttributes = ["src"]
+  static mirroredProps = ["src"]
   
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
