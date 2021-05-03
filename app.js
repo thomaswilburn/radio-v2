@@ -28,7 +28,7 @@ class Radio extends Emitter {
   
   async syncUp() {
     var feeds = await this.feeds.getAll();
-    var body = JSON.stringify(feeds.sort((a, b) => a.subscribed - b.subscribed).map(f => f.url));
+    var body = JSON.stringify(feeds);
     var post = await fetch("/fetch-key-repeat/new", {
       method: "POST",
       body,
@@ -48,10 +48,10 @@ class Radio extends Emitter {
     var json = await request.json();
     if (!json instanceof Array) return alert("Unable to parse feed array!");
     for (var feed of json) {
-      var existing = await this.feeds.get(feed);
-      if (!existing) {
-        await this.feeds.set(feed, { url: feed, subscribed: Date.now() });
-      }
+      var legacy = typeof feed == "string";
+      var url = legacy ? feed : feed.url;
+      var data = legacy ? { url, subscribed: Date.now() } : feed;
+      await this.feeds.set(url, data);
     }
   }
 }
