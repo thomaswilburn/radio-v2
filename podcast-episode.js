@@ -29,8 +29,11 @@ class PodcastEpisode extends ElementBase {
   }
 
   onExpand() {
-    this.classList.toggle("expanded");
+    var expanded = this.classList.toggle("expanded");
     this.elements.expandButton.setAttribute("aria-pressed", this.classList.contains("expanded"));
+    if (expanded) {
+      this.elements.description.focus();
+    }
   }
   
   onClickPlay() {

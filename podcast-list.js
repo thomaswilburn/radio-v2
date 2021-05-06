@@ -49,6 +49,7 @@ class PodcastList extends ElementBase {
     matchData(this, feeds, "url", function(item) {
       var list = document.createElement("podcast-feed");
       list.src = item.url;
+      list.setAttribute("role", "listitem");
       return list;
     });
     flip(this.children);
@@ -69,8 +70,6 @@ class PodcastList extends ElementBase {
     var subscribed = Date.now();
     await app.feeds.set(url, { url, subscribed });
   }
-
-  static template = `<slot></slot>`
 }
 
-PodcastList.define("podcast-list");
+PodcastList.define("podcast-list", "podcast-list.html");

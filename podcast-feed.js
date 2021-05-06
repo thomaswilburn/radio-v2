@@ -94,7 +94,10 @@ class PodcastFeed extends ElementBase {
     metadata.credit = parsed.credit;
     app.feeds.set(url, metadata);
     // update UI
-    this.elements.title.innerHTML = metadata.renamed || metadata.title;
+    var title = metadata.renamed || metadata.title
+    this.elements.title.innerHTML = title;
+    var feedTitleLabels = this.shadowRoot.querySelectorAll(".feed-name");
+    feedTitleLabels.forEach(t => t.innerHTML = title);
     this.feed = parsed;
     var listened = metadata.listened || 0;
     var unheard = this.feed.items.filter(f => f.date > listened).length;
@@ -123,6 +126,7 @@ class PodcastFeed extends ElementBase {
         <div slot="title">${item.title}</div>
         <div slot="description">${item.description.replace(/\n+/g, "<br><br>")}</div>
       `;
+      episode.setAttribute("role", "listitem");
       return episode;
     });
   }
@@ -186,7 +190,10 @@ class PodcastFeed extends ElementBase {
   onClickExpand() {
     var expanded = this.classList.toggle("expanded");
     this.elements.expandButton.setAttribute("aria-pressed", expanded);
-    if (expanded) this.elements.title.scrollIntoView({ behavior: "smooth" });
+    if (expanded) {
+      this.elements.title.scrollIntoView({ behavior: "smooth" });
+      this.elements.itemsHeader.focus();
+    }
   }
   
   onClickMore() {

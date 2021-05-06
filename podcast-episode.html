@@ -67,18 +67,18 @@
   }
 </style>
 <div class="metadata">
-  <button as="playButton">
-    Play
-  </button>
-  <hr>
   <div class="title" as="title">
     <slot name="title"></slot>
   </div>
-  <hr>
-  <button as="expandButton" aria-pressed="false">
+  <hr aria-hidden="true">
+  <button as="playButton">
+    Play
+  </button>
+  <hr aria-hidden="true">
+  <button as="expandButton" aria-pressed="false" aria-label="Expand description">
     &vellip;
   </button>
 </div>
-<div class="description">
+<div class="description" as="description" tabindex="-1">
   <slot name="description"></slot>
 </div>

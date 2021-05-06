@@ -4,6 +4,13 @@
     to { transform: translateY(0); }
   }
 
+  .sr-only {
+    position: absolute;
+    left: -10000px;
+    height: 1px;
+    width: 1px;
+  }
+
   :host {
     position: relative;
     font-family: var(--ui-font);
@@ -167,7 +174,7 @@
   }
 </style>
 <div class="metadata">
-  <img as="artwork">
+  <img as="artwork" alt="">
   <div class="titles">
     <div class="feed title" as="title"></div>
     <div class="episode title" as="episode"></div>
@@ -183,19 +190,25 @@
     <hr>
 
     <div class="time">
-      <span as="current">0:00:00</span>
-      <span as="duration">0:00:00</span>
+      <div>
+        <span class="sr-only">Current</span>
+        <span as="current">0:00:00</span>
+      </div>
+      <div>
+        <span class="sr-only">Total</span>
+        <span as="duration">0:00:00</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="controls">
-  <button as="rewind" class="rewind left">
+  <button as="rewind" class="rewind left" aria-label="Skip back">
     <span>-A</span>
   </button>
 
-  <button as="play" class="play" data-state="seeking">
-    <svg width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none">
+  <button as="play" class="play" aria-label="Play" data-state="seeking">
+    <svg role="img" alt="" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none">
       <path class="play icon" d="M8,4 L28,16 L8,28 Z" fill="currentColor" />
       <g class="pause icon">
         <line x1="10" x2="10" y1="4" y2="28" stroke="currentColor" stroke-width="5" />
@@ -209,11 +222,11 @@
     </svg>
   </button>
 
-  <button as="skip" class="skip right">
+  <button as="skip" class="skip right" aria-label="Skip ahead">
     <span>+A</span>
   </button>
   
-  <button as="stop" class="stop round">
+  <button as="stop" class="stop round" aria-label="Stop">
     <svg width="16" height="16">
       <path stroke="currentColor" fill="none" d="M0,0 L16,16 M0,16 L16,0" stroke-width="2" />
     </svg>

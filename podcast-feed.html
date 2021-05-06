@@ -29,6 +29,8 @@
     text-overflow: ellipsis;
     font-size: 1.3rem;
     padding: 8px;
+    margin: 0;
+    font-weight: normal;
   }
   
   @keyframes spinner {
@@ -126,10 +128,17 @@
   :host(.searching) .notSearching {
     display: none;
   }
+
+  .sr-only {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+  }
 </style>
 <div class="feed-meta">
   <div class="primary">
-    <div as="title">Loading...</div>
+    <h2 as="title">Loading...</h2>
     <div class="load-spinner icon">&#9836;</div>
     <button
       aria-label="play latest"
@@ -147,29 +156,37 @@
       &#9661;
     </button>
   </div>
-  <div class="controls">
+  <div as="controls" class="controls" role="navigation" aria-label="Feed admin">
     <button as="unsubscribeButton">
-      Remove
+      Remove <span class="sr-only feed-name"></span>
     </button>
     <hr aria-hidden="true">
     <button as="renameButton">
-      Rename
+      Rename <span class="sr-only feed-name"></span>
     </button>
     <hr aria-hidden="true">
     <button as="searchButton">
-      Search
+      Search <span class="sr-only feed-name"></span>
     </button>
     <hr aria-hidden="true">
     <button as="markHeardButton">
-      Clear
+      Clear <span class="sr-only feed-name"></span>
     </button>
     <hr aria-hidden="true">
     <button as="refreshButton">
-      Refresh
+      Refresh <span class="sr-only feed-name"></span>
     </button>
   </div>
 </div>
-<slot class="onlyExpanded" as="items"></slot>
+<div class="onlyExpanded" as="items">
+  <h3 as="itemsHeader" class="sr-only" tabindex="-1">
+    <span class="feed-name"></span>
+    Episodes
+  </h3>
+  <div role="list">
+    <slot></slot>
+  </div>
+</div>
 <button class="notSearching onlyExpanded" as="showMoreButton">
   Show more...
 </button>
