@@ -40,6 +40,12 @@ podcast-list {
   overflow-y: auto;
 }
 
+podcast-feed { position: relative }
+podcast-feed:nth-child(1) { z-index: 9999 }
+podcast-feed:nth-child(2) { z-index: 999 }
+podcast-feed:nth-child(3) { z-index: 99 }
+podcast-feed:nth-child(4) { z-index: 9 }
+
 audio-player {
   box-shadow: 0 -8px 8px rgba(0, 0, 0, .1);
   position: sticky;
