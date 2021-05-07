@@ -32,7 +32,7 @@ class PodcastEpisode extends ElementBase {
     var expanded = this.classList.toggle("expanded");
     this.elements.expandButton.setAttribute("aria-pressed", this.classList.contains("expanded"));
     if (expanded) {
-      this.elements.description.focus();
+      this.elements.description.focus({ preventScroll: true });
     }
   }
   
