@@ -47,7 +47,8 @@ podcast-feed:nth-child(3) { z-index: 99 }
 podcast-feed:nth-child(4) { z-index: 9 }
 
 audio-player {
-  box-shadow: 0 -8px 8px rgba(0, 0, 0, .1);
+  box-shadow: 0 -8px 16px rgba(0, 0, 0, .5);
   position: sticky;
   bottom: 0;
+  z-index: 99999;
 }
