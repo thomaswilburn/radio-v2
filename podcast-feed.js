@@ -193,6 +193,8 @@ class PodcastFeed extends ElementBase {
     if (expanded) {
       this.elements.title.scrollIntoView({ behavior: "smooth", block: "start" });
       this.elements.itemsHeader.focus({ preventScroll: true });
+    } else {
+      this.elements.title.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
   
