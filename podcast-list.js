@@ -1,5 +1,5 @@
 import ElementBase from "./lib/element-base.js";
-import { matchData } from "./lib/common.js";
+import { matchData, debounce } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-feed.js";
 import { measure, flip } from "./lib/flip.js";
@@ -13,7 +13,7 @@ class PodcastList extends ElementBase {
 
   constructor() {
     super();
-    this.load().then(() => app.feeds.on("change", this.load));
+    this.load().then(() => app.feeds.on("change", debounce(this.load)));
   }
 
   connectedCallback() {
@@ -56,7 +56,7 @@ class PodcastList extends ElementBase {
     });
     flip(this.children);
   }
-  
+
   async onUnsubRequest(data) {
     var { url } = data;
     var feed = await app.feeds.get(url);
