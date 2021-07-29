@@ -38,6 +38,7 @@ podcast-list {
   display: block;
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 podcast-feed { position: relative }

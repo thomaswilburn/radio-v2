@@ -8,6 +8,7 @@ class MenuBar extends ElementBase {
   constructor() {
     super();
     this.elements.menu.addEventListener("change", this.onMenu);
+    this.elements.icon.addEventListener("click", () => app.fire("list-top"));
   }
   
   onMenu() {

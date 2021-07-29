@@ -14,6 +14,12 @@ class PodcastList extends ElementBase {
   constructor() {
     super();
     this.load().then(() => app.feeds.on("change", debounce(this.load)));
+    app.on("list-top", () => {
+      var first = this.querySelector("podcast-feed");
+      if (first) {
+        first.scrollIntoView({ behavior: "smooth" });
+      }
+    });
   }
 
   connectedCallback() {
