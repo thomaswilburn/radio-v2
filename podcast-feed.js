@@ -1,5 +1,5 @@
 import ElementBase from "./lib/element-base.js";
-import { $, matchData, proxyXML, getXML, removeCDATA } from "./lib/common.js";
+import { $, matchData, proxyXML, getXML, removeCDATA, widont } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-episode.js";
 
@@ -123,7 +123,7 @@ class PodcastFeed extends ElementBase {
       var episode = document.createElement("podcast-episode");
       episode.setAttribute("src", item.enclosure);
       episode.innerHTML = `
-        <div slot="title">${item.title}</div>
+        <div slot="title">${widont(item.title)}</div>
         <div slot="description">${item.description.replace(/\n+/g, "<br><br>")}</div>
       `;
       episode.setAttribute("role", "listitem");
