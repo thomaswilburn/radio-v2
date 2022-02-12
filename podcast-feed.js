@@ -208,6 +208,9 @@ class PodcastFeed extends ElementBase {
     metadata.listened = Date.now();
     await app.feeds.set(this.src, metadata);
     this.dataset.unheard = 0;
+    // close, but do not scroll - animation needs to run
+    this.classList.toggle("expanded", false);
+    this.elements.expandButton.setAttribute("aria-pressed", false);
   }
   
   async sendPlayRequest(e) {
