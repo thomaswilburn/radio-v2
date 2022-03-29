@@ -4,11 +4,17 @@ import app from "./app.js";
 import "./podcast-feed.js";
 import { measure, flip } from "./lib/flip.js";
 
+const OVERSCROLL_THRESHOLD = window.innerHeight * .5;
+const REFRESH_THRESHOLD = OVERSCROLL_THRESHOLD * .6;
+
 class PodcastList extends ElementBase {
   
   static boundMethods = [
     "load",
-    "onUnsubRequest"
+    "onUnsubRequest",
+    "onTouchStart",
+    "onTouchEnd",
+    "onTouchMove"
   ]
 
   constructor() {
@@ -20,6 +26,12 @@ class PodcastList extends ElementBase {
         first.scrollIntoView({ behavior: "smooth" });
       }
     });
+
+    // overscroll refresh
+    this.scrollOrigin = false;
+    this.addEventListener("touchstart", this.onTouchStart);
+    this.addEventListener("touchend", this.onTouchEnd);
+    this.addEventListener("touchmove", this.onTouchMove);
   }
 
   connectedCallback() {
@@ -77,6 +89,32 @@ class PodcastList extends ElementBase {
     if (!url) return;
     var subscribed = Date.now();
     await app.feeds.set(url, { url, subscribed });
+  }
+
+  onTouchStart(e) {
+    if (this.scrollTop == 0 && !this.scrollOrigin) {
+      this.scrollOrigin = e.touches[0].clientY;
+    }
+  }
+
+  onTouchEnd(e) {
+    if (this.scrollOrigin && this.scrollTop == 0) {
+      var offset = e.changedTouches[0].clientY - this.scrollOrigin;
+      if (offset > OVERSCROLL_THRESHOLD * .5) app.fire("refresh-all");
+    }
+    this.scrollOrigin = false;
+    this.elements.refresh.style.transform = "";
+  }
+
+  onTouchMove(e) {
+    if (this.scrollOrigin) {
+      var offset = e.changedTouches[0].clientY - this.scrollOrigin;
+      if (offset < 0) return;
+      if (offset > OVERSCROLL_THRESHOLD) offset = OVERSCROLL_THRESHOLD;
+      var scaled = Math.sin(offset / OVERSCROLL_THRESHOLD * (Math.PI / 2)) * OVERSCROLL_THRESHOLD;
+      this.elements.refresh.style.transform = `translateY(${scaled}px)`;
+      this.elements.refresh.classList.toggle("will-refresh", offset > REFRESH_THRESHOLD);
+    }
   }
 }
 
