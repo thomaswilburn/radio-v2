@@ -34,6 +34,11 @@ body {
   opacity: 0;
 }
 
+menu-bar {
+  position: relative;
+  z-index: 999;
+}
+
 podcast-list {
   display: block;
   flex: 1;
@@ -42,10 +47,10 @@ podcast-list {
 }
 
 podcast-feed { position: relative }
-podcast-feed:nth-child(1) { z-index: 9999 }
-podcast-feed:nth-child(2) { z-index: 999 }
-podcast-feed:nth-child(3) { z-index: 99 }
-podcast-feed:nth-child(4) { z-index: 9 }
+podcast-feed:nth-child(1) { z-index: 13 }
+podcast-feed:nth-child(2) { z-index: 12 }
+podcast-feed:nth-child(3) { z-index: 11 }
+podcast-feed:nth-child(4) { z-index: 10 }
 
 audio-player {
   box-shadow: 0 -8px 16px rgba(0, 0, 0, .5);

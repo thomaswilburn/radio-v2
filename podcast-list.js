@@ -94,6 +94,7 @@ class PodcastList extends ElementBase {
   onTouchStart(e) {
     if (this.scrollTop == 0 && !this.scrollOrigin) {
       this.scrollOrigin = e.touches[0].clientY;
+      this.elements.refresh.classList.remove("released");
     }
   }
 
@@ -104,6 +105,7 @@ class PodcastList extends ElementBase {
     }
     this.scrollOrigin = false;
     this.elements.refresh.style.transform = "";
+    this.elements.refresh.classList.add("released");
   }
 
   onTouchMove(e) {
@@ -111,7 +113,8 @@ class PodcastList extends ElementBase {
       var offset = e.changedTouches[0].clientY - this.scrollOrigin;
       if (offset < 0) return;
       if (offset > OVERSCROLL_THRESHOLD) offset = OVERSCROLL_THRESHOLD;
-      var scaled = Math.sin(offset / OVERSCROLL_THRESHOLD * (Math.PI / 2)) * OVERSCROLL_THRESHOLD;
+      var half = OVERSCROLL_THRESHOLD * .5;
+      var scaled = Math.sin(offset / OVERSCROLL_THRESHOLD * (Math.PI / 2)) * half;
       this.elements.refresh.style.transform = `translateY(${scaled}px)`;
       this.elements.refresh.classList.toggle("will-refresh", offset > REFRESH_THRESHOLD);
     }
