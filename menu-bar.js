@@ -15,7 +15,7 @@ class MenuBar extends ElementBase {
     var value = this.elements.menu.value;
     if (!value) return;
     app.fire(value);
-    this.elements.menu.value = "";
+    this.elements.menu.selectedIndex = 0;
   }
 }
 
