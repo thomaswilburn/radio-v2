@@ -2,6 +2,8 @@ import ElementBase from "./lib/element-base.js";
 import app from "./app.js";
 import Table from "./lib/storage.js";
 
+var tick = () => new Promise(ok => requestAnimationFrame(ok));
+
 class AudioPlayer extends ElementBase {
 
   static boundMethods = [
@@ -14,8 +16,9 @@ class AudioPlayer extends ElementBase {
     "onClickStop",
     "onTouchHandle",
     "onDragHandle",
-    "onReleaseHandle"
-  ] 
+    "onReleaseHandle",
+    "onReloadPlayer"
+  ];
 
   constructor() {
     super();
@@ -26,6 +29,7 @@ class AudioPlayer extends ElementBase {
     // this.audio.addEventListener("error", this.onAudioError);
     this.audio.addEventListener("loadedmetadata", () => this.classList.add("playable"));
     app.on("play-request", this.onPlayRequest);
+    app.on("player-reload", this.onReloadPlayer);
     this.elements.play.addEventListener("click", this.onClickPlay);
     this.elements.skip.addEventListener("click", this.onClickSkip);
     this.elements.rewind.addEventListener("click", this.onClickRewind);
@@ -227,6 +231,22 @@ class AudioPlayer extends ElementBase {
     if (!this.paused) {
       this.audio.play();
     }
+  }
+
+  async onReloadPlayer() {
+    var paused = this.audio.paused;
+    this.audio.pause();
+    var src = this.audio.src;
+    var time = this.audio.currentTime;
+    this.audio.src = "";
+    await tick();
+    this.audio.src = src;
+    this.audio.addEventListener("canplay", () => {
+      this.audio.currentTime = time;
+      if (!paused) {
+        this.audio.play();
+      }
+    }, { once: true });
   }
   
 }
