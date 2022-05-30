@@ -13,20 +13,22 @@ tap._transform = function(chunk, encoding, callback) {
   callback(null, chunk);
 };
 
-var fetch = function(address, output) {
+var fetch = function(address, req, output) {
   var parsed = new URL(address);
   var remote = parsed.protocol == "http:" ? http : https;
   var { host, pathname, search } = parsed;
+  var headers = Object.assign({}, req.headers);
+  delete headers.host;
+  delete headers.referer;
   console.log(`Fetching: ${host}/${pathname}`);
+  headers["User-Agent"] = "Radio";
   var p = remote.get({
     host,
     path: pathname + search,
-    headers: {
-      "User-Agent": "Radio"
-    }
+    headers
   }, function(proxied) {
     if (proxied.statusCode > 300 && proxied.headers.location) {
-      return fetch(proxied.headers.location, output);
+      return fetch(proxied.headers.location, req, output);
     }
     output.writeHead(proxied.statusCode, proxied.headers);
     proxied.pipe(output);
@@ -37,7 +39,7 @@ var fetch = function(address, output) {
 app.get("/proxy", function(req, response) {
   var url = new URL("http://localhost" + req.url);
   var address = url.searchParams.get("url");
-  fetch(address, response);
+  fetch(address, req, response);
 });
 
 app.listen(process.env.PORT || 8000);

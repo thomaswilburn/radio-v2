@@ -1,7 +1,9 @@
 import ElementBase from "./lib/element-base.js";
-import { $, matchData, proxyXML, getXML, removeCDATA, widont } from "./lib/common.js";
+import { $, matchData, widont } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-episode.js";
+
+var removeCDATA = str => str.replace(/^<!\[CDATA\[|<[^>]+>|\]\]>$/g, "").trim();
 
 class PodcastFeed extends ElementBase {
 
@@ -26,6 +28,8 @@ class PodcastFeed extends ElementBase {
     this.limit = 10;
     this.pageSize = 10;
     this.proxied = false;
+    this.etag = null;
+    this.since = null;
     
     this.elements.expandButton.addEventListener("click", this.onClickExpand);
     this.elements.playLatest.addEventListener("click", this.onClickPlayLatest);
@@ -55,23 +59,61 @@ class PodcastFeed extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
+        this.etag = null;
+        this.since = null;
         this.load(value);
         break;
     }
   }
 
+  getXML(url) {
+    return new Promise((ok, fail) => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url.toString());
+      xhr.responseType = "document";
+      if (this.etag) {
+        xhr.setRequestHeader("If-None-Match", this.etag);
+      }
+      if (this.since) {
+        xhr.setRequestHeader("If-Modified-Since", this.since);
+      }
+      xhr.send();
+      xhr.onload = () => {
+        if (xhr.status == 304) return fail(xhr);
+        this.etag = xhr.getResponseHeader("etag");
+        this.since = xhr.getResponseHeader("last-modified");
+        ok(xhr);
+      };
+      xhr.onerror = err => fail(xhr);
+    });
+  }
+
+  proxyXML(dest) {
+    var here = window.location.pathname;
+    // remove trailing path parts
+    here = here.replace(/\/[^\/]*$/, "");
+    var url = new URL(window.location.origin + here + "/proxy");
+    url.searchParams.set("url", dest);
+    return this.getXML(url);
+  }
+
   async requestFeed(url) {
-    var response;
-    if (this.proxied) return proxyXML(url);
+    var request;
     try {
-      response = await getXML(url);
+      request = await (this.proxied ? this.proxyXML(url) : this.getXML(url));
       console.log(`Successful CORS request for ${url}`);
     } catch (err) {
-      console.log(`Direct request for ${url} failed, using proxy`);
-      this.proxied = true;
-      response = await proxyXML(url);
+      // retry through the proxy
+      if (!this.proxied && err.status == 0) {
+        console.log(`Direct request for ${url} failed, using proxy`);
+        this.proxied = true;
+        return this.requestFeed(url);
+      }
+      if (err.status == 304) {
+        throw err;
+      }
     }
-    return response;
+    return request.response;
   }
   
   async load(url = this.src) {
@@ -82,7 +124,11 @@ class PodcastFeed extends ElementBase {
       var xml = await this.requestFeed(url);
     } catch (err) {
       this.classList.remove("loading");
-      console.log("Unable to load feed: ", url);
+      if (err.status == 304) {
+        console.log("Feed is unchanged since last request", url);
+      } else {
+        console.log("Unable to load feed: ", url);
+      }
       return;
     }
     this.classList.remove("loading");
