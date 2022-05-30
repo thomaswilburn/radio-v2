@@ -29,7 +29,6 @@ class PodcastFeed extends ElementBase {
     this.pageSize = 10;
     this.proxied = false;
     this.etag = null;
-    this.since = null;
     
     this.elements.expandButton.addEventListener("click", this.onClickExpand);
     this.elements.playLatest.addEventListener("click", this.onClickPlayLatest);
@@ -66,6 +65,15 @@ class PodcastFeed extends ElementBase {
     }
   }
 
+  getHeader(xhr, header) {
+    var headers = xhr.getAllResponseHeaders();
+    var includes = new RegExp("^" + header, "mi");
+    if (!includes.test(headers)) {
+      return null;
+    }
+    return xhr.getResponseHeader(header);
+  }
+
   getXML(url) {
     return new Promise((ok, fail) => {
       var xhr = new XMLHttpRequest();
@@ -80,8 +88,14 @@ class PodcastFeed extends ElementBase {
       xhr.send();
       xhr.onload = () => {
         if (xhr.status == 304) return fail(xhr);
-        this.etag = xhr.getResponseHeader("etag");
-        this.since = xhr.getResponseHeader("last-modified");
+        this.etag = this.getHeader(xhr, "etag");
+        // nobody correctly sets allow-headers for CORS requests
+        // but the browser will still reject them
+        // so only store the last-modified if it's explicitly allowed
+        var allowHeaders = this.getHeader(xhr, "access-control-allow-headers");
+        if (this.proxied || (allowHeaders && allowHeaders.match(/if-modified-since/))) {
+          this.since = this.getHeader(xhr, "last-modified");
+        }
         ok(xhr);
       };
       xhr.onerror = err => fail(xhr);
@@ -100,12 +114,16 @@ class PodcastFeed extends ElementBase {
   async requestFeed(url) {
     var request;
     try {
-      request = await (this.proxied ? this.proxyXML(url) : this.getXML(url));
-      console.log(`Successful CORS request for ${url}`);
+      if (this.proxied) {
+        request = await this.proxyXML(url);
+        console.log(`Successful proxy request for ${url}`);
+      } else {
+        request = await this.getXML(url);
+        console.log(`Successful CORS request for ${url}`);
+      }
     } catch (err) {
       // retry through the proxy
       if (!this.proxied && err.status == 0) {
-        console.log(`Direct request for ${url} failed, using proxy`);
         this.proxied = true;
         return this.requestFeed(url);
       }
@@ -125,9 +143,9 @@ class PodcastFeed extends ElementBase {
     } catch (err) {
       this.classList.remove("loading");
       if (err.status == 304) {
-        console.log("Feed is unchanged since last request", url);
+        console.info("Feed is unchanged since last request", url);
       } else {
-        console.log("Unable to load feed: ", url);
+        console.error("Unable to load feed: ", url);
       }
       return;
     }
