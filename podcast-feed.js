@@ -20,15 +20,17 @@ class PodcastFeed extends ElementBase {
     "sendPlayRequest"
   ]
 
+  feed = null;
+  query = null;
+  offset = 0;
+  limit = 10;
+  pageSize = 10;
+  proxied = true;
+  etag = null;
+  since = null;
+
   constructor() {
     super();
-    this.feed = null;
-    this.query = null;
-    this.offset = 0;
-    this.limit = 10;
-    this.pageSize = 10;
-    this.proxied = false;
-    this.etag = null;
     
     this.elements.expandButton.addEventListener("click", this.onClickExpand);
     this.elements.playLatest.addEventListener("click", this.onClickPlayLatest);
@@ -114,6 +116,8 @@ class PodcastFeed extends ElementBase {
   async requestFeed(url) {
     var request;
     try {
+      // technically, everything is proxied now
+      // the bandwidth savings are too high to ignore (5MB vs. 1MB)
       if (this.proxied) {
         request = await this.proxyXML(url);
         console.log(`Successful proxy request for ${url}`);
