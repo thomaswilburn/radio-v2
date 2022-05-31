@@ -20,7 +20,7 @@ var fetch = function(address, req, output) {
   var headers = Object.assign({}, req.headers);
   delete headers.host;
   delete headers.referer;
-  console.log(`Fetching: ${host}/${pathname}`);
+  console.log(`Fetching: ${parsed.toString()}`);
   headers["User-Agent"] = "Radio";
   var p = remote.get({
     host,
@@ -28,12 +28,16 @@ var fetch = function(address, req, output) {
     headers
   }, function(proxied) {
     if (proxied.statusCode > 300 && proxied.headers.location) {
+      console.log(`Redirected from ${parsed.toString()} to ${proxied.headers.location}`);
       return fetch(proxied.headers.location, req, output);
     }
     output.writeHead(proxied.statusCode, proxied.headers);
     proxied.pipe(output);
   });
-  p.on("error", err => console.error(err));
+  p.on("error", err => {
+    output.writeHead(500);
+    output.end(JSON.stringify(err));
+  });
 }
 
 app.get("/proxy", function(req, response) {
