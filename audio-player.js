@@ -26,7 +26,7 @@ class AudioPlayer extends ElementBase {
     this.audio.setAttribute("preload", "auto");
     this.audio.addEventListener("timeupdate", this.onAudioUpdate);
     this.audio.addEventListener("seeking", this.onAudioUpdate);
-    // this.audio.addEventListener("error", this.onAudioError);
+    this.audio.addEventListener("error", this.onAudioError);
     this.audio.addEventListener("loadedmetadata", () => this.classList.add("playable"));
     app.on("play-request", this.onPlayRequest);
     app.on("player-reload", this.onReloadPlayer);
@@ -163,16 +163,8 @@ class AudioPlayer extends ElementBase {
     console.log(e);
     if (this.errorState) return;
     this.errorState = true;
-    // get last valid location
-    var i = this.audio.played.length - 1;
-    var played = this.audio.played.end(i);
-    var memory = this.memory.get("playing");
-    if (!memory) return;
-    var { time } = memory;
-    var src = this.audio.src;
-    this.audio.src = src;
-    this.audio.currentTime = time;
-    this.audio.play();
+    // reboot the audio stream
+    this.onReloadPlayer();
   }
   
   onClickPlay() {
