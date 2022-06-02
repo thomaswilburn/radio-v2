@@ -110,13 +110,18 @@ class PodcastList extends ElementBase {
 
   onTouchMove(e) {
     if (this.scrollOrigin) {
+      var { refresh } = this.elements;
       var offset = e.changedTouches[0].clientY - this.scrollOrigin;
       if (offset < 0) return;
       if (offset > OVERSCROLL_THRESHOLD) offset = OVERSCROLL_THRESHOLD;
       var half = OVERSCROLL_THRESHOLD * .5;
       var scaled = Math.sin(offset / OVERSCROLL_THRESHOLD * (Math.PI / 2)) * half;
-      this.elements.refresh.style.transform = `translateY(${scaled}px)`;
-      this.elements.refresh.classList.toggle("will-refresh", offset > REFRESH_THRESHOLD);
+      refresh.style.transform = `translateY(${scaled}px)`;
+      refresh.classList.toggle("will-refresh", offset > REFRESH_THRESHOLD);
+      var ratio = offset / REFRESH_THRESHOLD;
+      refresh.classList.toggle("pulled-33", ratio > .3);
+      refresh.classList.toggle("pulled-66", ratio > .6);
+      refresh.classList.toggle("pulled-100", ratio > .9);
     }
   }
 }

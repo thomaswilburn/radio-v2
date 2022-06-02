@@ -17,33 +17,37 @@
   text-align: center;
   z-index: 999;
   pointer-events: none;
+  color: var(--shaded);
 }
 
 [as="refresh"].released {
   transition: all .3s ease;
 }
 
-.bug {
-  display: flex;
-  margin: auto;
-  width: 48px;
-  height: 48px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100%;
-  background: var(--shaded);
-  color: #FFF3;
-  transition: color .2s linear;
-  text-transform: uppercase;
-  font-family: var(--ui-font);
-  font-size: 32px;
-  font-weight: bold;
-  box-shadow: 0 8px 12px #0003;
-  line-height: 24px;
+[as="refresh"].will-refresh {
+  color: var(--foreground);
 }
 
-.will-refresh .bug {
-  color: white;
+.bug .backdrop {
+  fill: var(--background);
+}
+
+.bug path {
+  stroke: currentColor;
+  stroke-width: 2px;
+  fill: none;
+  transition: color .2s linear, opacity .2s linear;
+}
+
+.bug .waves {
+  stroke-dasharray: 8px 2px;
+  opacity: 0;
+}
+
+[as="refresh"].pulled-33 .inner,
+[as="refresh"].pulled-66 .middle,
+[as="refresh"].pulled-100 .outer {
+  opacity: 1;
 }
 
 </style>
@@ -51,5 +55,11 @@
   <slot></slot>
 </div>
 <div as="refresh">
-  <span class="bug">&circlearrowleft;</span>
+  <svg width=64 height=64 class="bug">
+    <circle cx=32 cy=32 r=32 class="backdrop" />
+    <path d="M24,56 L32,36 L40,56 L29,46 l6,0 L24,56" class="tower" />
+    <path d="M16,46 A22,22 0 1 1 48,46" class="waves outer" />
+    <path d="M22,40 A14,14 0 1 1 42,40" class="waves middle" />
+    <path d="M27,36 A7,7 0 1 1 37,36" class="waves inner" />
+  </svg>
 </div>
