@@ -6,6 +6,7 @@ import { measure, flip } from "./lib/flip.js";
 
 const OVERSCROLL_THRESHOLD = window.innerHeight * .5;
 const REFRESH_THRESHOLD = OVERSCROLL_THRESHOLD * .8;
+const START_OVERSCROLL = 30;
 
 class PodcastList extends ElementBase {
   
@@ -106,6 +107,7 @@ class PodcastList extends ElementBase {
     this.scrollOrigin = false;
     this.elements.refresh.style.transform = "";
     this.elements.refresh.classList.add("released");
+    this.style.overflowY = "";
   }
 
   onTouchMove(e) {
@@ -113,6 +115,9 @@ class PodcastList extends ElementBase {
       var { refresh } = this.elements;
       var offset = e.changedTouches[0].clientY - this.scrollOrigin;
       if (offset < 0) return;
+      if (offset > START_OVERSCROLL) {
+        this.style.overflowY = "hidden";
+      }
       if (offset > OVERSCROLL_THRESHOLD) offset = OVERSCROLL_THRESHOLD;
       var half = OVERSCROLL_THRESHOLD * .5;
       var scaled = Math.sin(offset / OVERSCROLL_THRESHOLD * (Math.PI / 2)) * half;
