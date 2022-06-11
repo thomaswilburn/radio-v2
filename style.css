@@ -54,6 +54,9 @@ podcast-feed:nth-child(3) { z-index: 11 }
 podcast-feed:nth-child(4) { z-index: 10 }
 
 podcast-feed.menu-open { z-index: 99 }
+podcast-list.menu-open podcast-feed:not(.menu-open) {
+  pointer-events: none;
+}
 
 audio-player {
   box-shadow: 0 -8px 16px rgba(0, 0, 0, .5);

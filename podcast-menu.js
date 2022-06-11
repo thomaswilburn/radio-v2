@@ -2,7 +2,7 @@ import ElementBase from "./lib/element-base.js";
 
 class PodcastMenu extends ElementBase {
 
-  static boundMethods = ["onIntersection", "toggleMenu", "onSelect", "onBlur"];
+  static boundMethods = ["toggleMenu", "onSelect", "onBlur"];
 
   constructor() {
     super();
@@ -12,10 +12,6 @@ class PodcastMenu extends ElementBase {
     menu.querySelectorAll("button").forEach(b => b.addEventListener("click", this.onSelect));
     menu.addEventListener("blur", this.onBlur);
 
-    this.observer = new IntersectionObserver(this.onIntersection, {
-      threshold: 1
-    });
-    this.observer.observe(menu);
   }
 
   toggleMenu(hide) {
@@ -28,7 +24,7 @@ class PodcastMenu extends ElementBase {
       menu.focus();
       var bounds = this.getBoundingClientRect();
       if (bounds.top > window.innerHeight * .3) {
-        menu.classList.add("upward");
+        // menu.classList.add("upward");
       }
       menu.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } else {
@@ -39,13 +35,6 @@ class PodcastMenu extends ElementBase {
 
   onBlur() {
     setTimeout(() => this.toggleMenu(true), 100);
-  }
-
-  onIntersection([entry]) {
-    if (!entry.isIntersecting) {
-      var overflowBottom = entry.boundingClientRect.bottom > window.innerHeight;
-      this.elements.menu.classList.toggle("upward", overflowBottom);
-    }
   }
 
   onSelect(e) {

@@ -28,6 +28,12 @@ class PodcastList extends ElementBase {
       }
     });
 
+    // handle menu taps
+    var { list } = this.elements;
+    this.addEventListener("menu-state", e => {
+      this.classList.toggle("menu-open", e.detail.open);
+    });
+
     // overscroll refresh
     this.scrollOrigin = false;
     this.addEventListener("touchstart", this.onTouchStart);
