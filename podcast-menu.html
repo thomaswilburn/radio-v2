@@ -19,6 +19,7 @@
 
 .toggle.open {
   transform: rotate(90deg);
+  font-weight: bold;
 }
 
 .screen {
@@ -35,17 +36,17 @@
   margin: 0;
   position: absolute;
   right: 100%;
-  top: 0;
+  top: 50%;
   z-index: 99999;
   list-style-type: none;
   background: var(--foreground);
   color: var(--foreground);
   box-shadow: 0 8px 16px #000C;
+  transition: transform .1s linear;
 }
 
 .menu.upward {
-  top: auto;
-  bottom: 0;
+  transform: translateY(-100%);
 }
 
 .menu button {
