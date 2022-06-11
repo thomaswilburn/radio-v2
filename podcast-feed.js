@@ -2,6 +2,7 @@ import ElementBase from "./lib/element-base.js";
 import { $, matchData, widont } from "./lib/common.js";
 import app from "./app.js";
 import "./podcast-episode.js";
+import "./podcast-menu.js";
 
 var removeCDATA = str => str.replace(/^<!\[CDATA\[|<[^>]+>|\]\]>$/g, "").trim();
 
@@ -32,15 +33,24 @@ class PodcastFeed extends ElementBase {
   constructor() {
     super();
     
-    this.elements.expandButton.addEventListener("click", this.onClickExpand);
     this.elements.playLatest.addEventListener("click", this.onClickPlayLatest);
     this.elements.title.addEventListener("click", this.onClickExpand);
     this.elements.showMoreButton.addEventListener("click", this.onClickMore);
-    this.elements.unsubscribeButton.addEventListener("click", this.onClickUnsubscribe);
-    this.elements.renameButton.addEventListener("click", this.onClickRename);
-    this.elements.searchButton.addEventListener("click", this.onClickSearch);
-    this.elements.refreshButton.addEventListener("click", this.onClickRefresh);
-    this.elements.markHeardButton.addEventListener("click", this.onClickMarkHeard);
+    // this.elements.unsubscribeButton.addEventListener("click", this.onClickUnsubscribe);
+    // this.elements.renameButton.addEventListener("click", this.onClickRename);
+    // this.elements.searchButton.addEventListener("click", this.onClickSearch);
+    // this.elements.refreshButton.addEventListener("click", this.onClickRefresh);
+    // this.elements.markHeardButton.addEventListener("click", this.onClickMarkHeard);
+
+    this.addEventListener("menu-action:refresh", this.onClickRefresh);
+    this.addEventListener("menu-action:search", this.onClickSearch);
+    this.addEventListener("menu-action:unsubscribe", this.onClickUnsubscribe);
+    this.addEventListener("menu-action:rename", this.onClickRename);
+    this.addEventListener("menu-action:clear", this.onClickMarkHeard);
+    this.addEventListener("menu-action:latest", this.onClickPlayLatest);
+
+    this.addEventListener("menu-state", e => this.classList.toggle("menu-open", e.detail.open));
+    
     this.addEventListener("episode-play", this.sendPlayRequest);
   }
   
@@ -234,6 +244,7 @@ class PodcastFeed extends ElementBase {
   onClickSearch() {
     var query = prompt("Search feed for term:", this.query || "");
     this.query = query;
+    if (query) this.classList.add("expanded");
     this.render();
   }
   
@@ -257,7 +268,6 @@ class PodcastFeed extends ElementBase {
   
   onClickExpand() {
     var expanded = this.classList.toggle("expanded");
-    this.elements.expandButton.setAttribute("aria-pressed", expanded);
     if (expanded) {
       this.elements.title.scrollIntoView({ behavior: "smooth", block: "start" });
       this.elements.itemsHeader.focus({ preventScroll: true });

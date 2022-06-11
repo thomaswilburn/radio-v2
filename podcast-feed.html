@@ -10,8 +10,9 @@
     margin-bottom: 24px;
   }
 
-  .feed-meta {
+  :host(.expanded) .feed-meta {
     position: sticky;
+    z-index: 99;
     top: 0;
   }
 
@@ -87,6 +88,7 @@
   
   .controls {
     display: flex;
+    display: none;
     font-size: .8rem;
     justify-content: space-between;
     padding: 8px 16px;
@@ -147,14 +149,7 @@
     >
       &#8795;
     </button>
-    <button
-      aria-label="expand feed"
-      aria-pressed="false"
-      class="expando"
-      as="expandButton"
-    >
-      &#9661;
-    </button>
+    <podcast-menu></podcast-menu>
   </div>
   <div as="controls" class="controls" role="navigation" aria-label="Feed admin">
     <button as="unsubscribeButton">

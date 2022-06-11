@@ -1,0 +1,77 @@
+<style>
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.toggle {
+  transition: transform .2s ease;
+  transform-origin: center;
+  display: block;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0 8px;
+}
+
+.toggle.open {
+  transform: rotate(90deg);
+}
+
+.screen {
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.menu {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: 100%;
+  top: 0;
+  z-index: 99999;
+  list-style-type: none;
+  background: var(--foreground);
+  color: var(--foreground);
+}
+
+.menu.upward {
+  top: auto;
+  bottom: 0;
+}
+
+.menu button {
+  display: block;
+  background: transparent;
+  border: none;
+  text-transform: uppercase;
+  padding: 8px;
+  font-size: 16px;
+  font-family: var(--ui-font);
+}
+
+</style>
+<button
+  aria-label="podcast actions"
+  aria-pressed="false"
+  as="menuToggle"
+  class="toggle"
+>
+  &#9661;
+</button>
+<div class="screen" as="modal" hidden></div>
+<ul class="menu" as="menu" hidden tabindex="-1">
+  <li> <button data-action="latest">Play latest</button>
+  <li> <button data-action="refresh">Refresh</button>
+  <li> <button data-action="clear">Mark all</button>
+  <li> <button data-action="search">Search</button>
+  <li> <button data-action="rename">Rename</button>
+  <li> <button data-action="unsubscribe">Unsubscribe</button>
+</ul>
