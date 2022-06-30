@@ -11,7 +11,6 @@ class PodcastEpisode extends ElementBase {
 
   constructor() {
     super();
-    this.elements.expandButton.addEventListener("click", this.onExpand);
     this.elements.playButton.addEventListener("click", this.onClickPlay);
     this.elements.title.addEventListener("click", this.onExpand);
   }

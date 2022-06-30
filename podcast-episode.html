@@ -46,15 +46,6 @@
     overflow: hidden;
   }
   
-  [as="expandButton"] {
-    font-size: 2rem;
-    font-weight: bold;
-    background: transparent;
-    border: none;
-    color: var(--foreground);
-    padding: 4px 12px;
-  }
-  
   .description {
     display: none;
     font-family: var(--content-font);
@@ -77,10 +68,6 @@
   <hr aria-hidden="true">
   <button as="playButton">
     Play
-  </button>
-  <hr aria-hidden="true">
-  <button as="expandButton" aria-pressed="false" aria-label="Expand description">
-    &vellip;
   </button>
 </div>
 <div class="description" as="description" tabindex="-1">
