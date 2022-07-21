@@ -271,6 +271,10 @@ class PodcastFeed extends ElementBase {
     if (expanded) {
       this.elements.title.scrollIntoView({ behavior: "smooth", block: "start" });
       this.elements.itemsHeader.focus({ preventScroll: true });
+      if (Number(this.dataset.unheard)) {
+        var first = this.querySelector("podcast-episode");
+        if (first && !first.classList.contains("expanded")) first.onExpand();
+      }
     } else {
       this.elements.title.scrollIntoView({ behavior: "smooth", block: "center" });
     }
