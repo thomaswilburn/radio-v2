@@ -106,7 +106,7 @@ class PodcastFeed extends ElementBase {
         // so only store the last-modified if it's explicitly allowed
         var allowHeaders = this.getHeader(xhr, "access-control-allow-headers");
         if (this.proxied || (allowHeaders && allowHeaders.match(/if-modified-since/))) {
-          this.since = this.getHeader(xhr, "last-modified");
+          // this.since = this.getHeader(xhr, "last-modified");
         }
         ok(xhr);
       };
@@ -226,7 +226,7 @@ class PodcastFeed extends ElementBase {
       var trackArt = item.getElementsByTagName("itunes:image")[0];
       result.artwork = trackArt ? trackArt.getAttribute("href") : artwork;
       return result;
-    });
+    }).filter(i => i);
     parsed.title = $.one("channel title", document).textContent.trim();
     parsed.latest = Math.max(...parsed.items.map(i => i.date));
     var credit = document.getElementsByTagName("itunes:author")[0] ||
