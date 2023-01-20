@@ -226,7 +226,7 @@ class PodcastFeed extends ElementBase {
       var trackArt = item.getElementsByTagName("itunes:image")[0];
       result.artwork = trackArt ? trackArt.getAttribute("href") : artwork;
       return result;
-    }).filter(i => i);
+    }).filter(i => i).sort((a, b) => b.date - a.date);
     parsed.title = $.one("channel title", document).textContent.trim();
     parsed.latest = Math.max(...parsed.items.map(i => i.date));
     var credit = document.getElementsByTagName("itunes:author")[0] ||
