@@ -160,7 +160,7 @@ class AudioPlayer extends ElementBase {
   }
   
   onAudioError(e) {
-    console.log(e);
+    console.log(this.audio.error);
     if (this.errorState) return;
     this.errorState = true;
     // reboot the audio stream
