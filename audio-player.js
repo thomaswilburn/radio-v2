@@ -20,6 +20,12 @@ class AudioPlayer extends ElementBase {
     "onReloadPlayer"
   ];
 
+  paused = false;
+  dragging = false;
+  backoff = 0;
+  recovery = null;
+  saveCounter = 0;
+
   constructor() {
     super();
     this.audio = document.createElement("audio");
@@ -37,11 +43,7 @@ class AudioPlayer extends ElementBase {
     this.elements.scrubber.addEventListener("pointerdown", this.onTouchHandle);
     this.elements.scrubber.addEventListener("pointermove", this.onDragHandle);
     this.elements.scrubber.addEventListener("pointerup", this.onReleaseHandle);
-    this.dragging = false;
-    this.paused = true;
-    this.errorState = false;
     this.setEnabled(false);
-    this.saveCounter = 0;
     this.memory = new Table("audioplayer");
     this.memory.get("playing").then(track => {
       if (!track) return;
@@ -113,7 +115,10 @@ class AudioPlayer extends ElementBase {
     app.fire("track-update", audio.src);
 
     if (audio.src && !audio.paused) {
-      this.errorState = false;
+      if (this.recovery) {
+        clearTimeout(this.recovery);
+        this.recovery = null;
+      }
       if (this.saveCounter % 10 == 0) {
         this.memorize({
           time: audio.currentTime,
@@ -157,14 +162,6 @@ class AudioPlayer extends ElementBase {
     
     this.elements.current.innerHTML = this.formatTime(time);
     this.elements.duration.innerHTML = this.formatTime(duration);
-  }
-  
-  onAudioError(e) {
-    console.log(this.audio.error);
-    if (this.errorState) return;
-    this.errorState = true;
-    // reboot the audio stream
-    this.onReloadPlayer();
   }
   
   onClickPlay() {
@@ -225,6 +222,14 @@ class AudioPlayer extends ElementBase {
     }
   }
 
+  onAudioError(e) {
+    var { error } = this.audio;
+    if (error.code == MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) return;
+    console.log(this.audio.error);
+    // reboot the audio stream
+    this.recovery = setTimeout(this.onReloadPlayer, Math.pow(10, this.backoff++));
+  }
+  
   async onReloadPlayer() {
     var paused = this.audio.paused;
     this.audio.pause();
@@ -234,6 +239,9 @@ class AudioPlayer extends ElementBase {
     await tick();
     this.audio.src = src;
     this.audio.addEventListener("canplay", () => {
+      this.backoff = 0;
+      clearTimeout(this.recovery);
+      this.recovery = null;
       this.audio.currentTime = time;
       if (!paused) {
         this.audio.play();
