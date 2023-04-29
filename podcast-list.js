@@ -65,8 +65,8 @@ class PodcastList extends ElementBase {
     }
     feeds = feeds.sort(function(a, b) {
       if (a.latest || b.latest) {
-        var aUnread = a.listened && a.listened > a.latest ? 10 : 1;
-        var bUnread = b.listened && b.listened > b.latest ? 10 : 1;
+        var aUnread = a.listened && a.listened >= a.latest ? 10 : 1;
+        var bUnread = b.listened && b.listened >= b.latest ? 10 : 1;
         return (b.latest || 0) / bUnread - (a.latest || 0) / aUnread;
       }
       return a.subscribed - b.subscribed;
