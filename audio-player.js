@@ -226,6 +226,7 @@ class AudioPlayer extends ElementBase {
     var { error } = this.audio;
     if (error.code == MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) return;
     console.log(this.audio.error);
+    if (this.recovery) return;
     // reboot the audio stream
     this.recovery = setTimeout(this.onReloadPlayer, Math.pow(10, this.backoff++));
   }
@@ -236,12 +237,12 @@ class AudioPlayer extends ElementBase {
     var src = this.audio.src;
     var time = this.audio.currentTime;
     this.audio.src = "";
+    clearTimeout(this.recovery);
+    this.recovery = null;
     await tick();
     this.audio.src = src;
     this.audio.addEventListener("canplay", () => {
       this.backoff = 0;
-      clearTimeout(this.recovery);
-      this.recovery = null;
       this.audio.currentTime = time;
       if (!paused) {
         this.audio.play();
