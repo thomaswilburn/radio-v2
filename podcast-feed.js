@@ -304,7 +304,7 @@ class PodcastFeed extends ElementBase {
       credit: this.feed.credit
     });
     var metadata = await app.feeds.get(this.src);
-    var listened = Math.max(metadata.listened, episode.date * 1);
+    var listened = Math.max(metadata.listened || 0, episode.date * 1);
     metadata.listened = listened;
     var unheard = this.feed.items.filter(f => f.date > listened).length;
     app.feeds.set(this.src, metadata);
