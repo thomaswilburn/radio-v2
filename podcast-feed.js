@@ -214,10 +214,14 @@ class PodcastFeed extends ElementBase {
     var artwork = $.one("image url", document);
     artwork = artwork ? artwork.textContent.trim() : null;
     parsed.items = $("item", document).map(function(item) {
-      var result = {};
+      var result = {
+        description: "No description provided."
+      };
       ["pubDate", "title", "description", "link"].forEach(function(k) {
         var element = $.one(k, item);
-        if (element) result[k] = removeCDATA(element.textContent);
+        var text = "";
+        if (element) text = removeCDATA(element.textContent);
+        if (text) result[k] = text;
       });
       var enclosure = item.querySelector("enclosure");
       if (!enclosure) return null;
