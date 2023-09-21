@@ -8,12 +8,12 @@
   
   :host(.expanded) {
     margin-bottom: 24px;
+  }
 
-    & .feed-meta {
-      position: sticky;
-      z-index: 99;
-      top: 0;
-    }
+  :host(.expanded) .feed-meta {
+    position: sticky;
+    z-index: 99;
+    top: 0;
   }
 
   .feed-meta .primary {
@@ -48,15 +48,8 @@
     display: block;
   }
   
-  :host(.loading) {
-    .load-spinner {
-      display: block;
-    }
-
-    .play-latest {
-      display: none;
-    }
-  }
+  :host(.loading) .load-spinner { display: block; }
+  :host(.loading) .play-latest { display: none; }
 
   :host([data-unheard="0"]) .play-latest {
     display: none;
@@ -121,19 +114,9 @@
     text-align: center;
   }
   
-  :host(:not(.expanded)) {
-    .controls {
-      display: none;
-    }
-  
-    .onlyExpanded {
-      display: none;
-    }
-  }
-  
-  :host(.searching) .notSearching {
-    display: none;
-  }
+  :host(:not(.expanded)) .controls { display: none; }
+  :host(:not(.expanded)) .onlyExpanded { display: none; }
+  :host(.searching) .notSearching { display: none; }
 
   .sr-only {
     position: absolute;
