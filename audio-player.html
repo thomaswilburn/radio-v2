@@ -1,9 +1,5 @@
 <style>
-  @keyframes player-enter {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-
+  
   .sr-only {
     position: absolute;
     left: -10000px;
@@ -24,27 +20,35 @@
     display: flex;
     align-items: center;
     padding-bottom: 8px;
+
+    @media (min-aspect-ratio: 1 / 1) {
+      grid-area: meta;
+      padding-bottom: 0;
+
+      .title {
+        white-space: normal;
+      }
+    }
+
+    & img {
+      background: gray;
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .titles {
+      flex: 1;
+      min-width: 0;
+      padding-left: 8px;
+    }
+
+    & img:not([src]), & img[src=""] {
+      display: none;
+    }
   }
 
-  .metadata img {
-    background: gray;
-    width: 64px;
-    height: 64px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .metadata img:not([src]),
-  .metadata img[src=""] {
-    display: none;
-  }
-
-  .metadata .titles {
-    flex: 1;
-    min-width: 0;
-    padding-left: 8px;
-  }
-  
   .title {
     white-space: nowrap;
     overflow: hidden;
@@ -55,19 +59,26 @@
   .feed.title {
     font-size: 80%;
   }
-  
-  .track .row {
-    display: flex;
-    align-items: center;
+
+  .track {
+    @media (min-aspect-ratio: 1 / 1) {
+      grid-area: track;
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+    }
   }
-  
+
   .progress-container {
     height: 24px;
     background: var(--background);
     position: relative;
     flex: 1;
   }
-  
+
   .progress {
     pointer-events: none;
     background: var(--foreground);
@@ -76,135 +87,130 @@
     left: 0;
     height: 100%;
   }
-  
+
   hr {
     margin: 0 16px;
     border: 1px solid var(--background);
     align-self: stretch;
   }
-  
+
   .time {
     font-size: .8rem;
     font-family: var(--monospace-font);
+
+    & span {
+      display: block;
+    }
   }
-  
-  .time span {
-    display: block;
-  }
-  
+
   .controls {
     display: flex;
     align-items: stretch;
     justify-content: center;
     margin: auto;
     padding-top: 12px;
-  }
-  
-  .controls button {
-    display: block;
-    padding: 12px 4px;
-    background: var(--shaded);
-    border-color: var(--background);
-    border-width: 1px;
-    border-style: solid;
-    flex: 1;
-    text-align: center;
-    color: var(--foreground);
-    font-size: 1.2rem;
-    box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .4);
-    margin: 0 3px;
+
+    @media (min-aspect-ratio: 1 / 1) {
+      grid-area: controls;
+      width: 100%;
+      padding-top: 0;
+    }
+
+    & button {
+      display: block;
+      padding: 12px 4px;
+      background: var(--shaded);
+      border-color: var(--background);
+      border-width: 1px;
+      border-style: solid;
+      flex: 1;
+      text-align: center;
+      color: var(--foreground);
+      font-size: 1.2rem;
+      box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .4);
+      margin: 0 3px;
+    }
+
+    .left {
+      margin-left: 0;
+    }
+
+    .right {
+      margin-right: 0;
+    }
+
+    & hr {
+      margin: 0 3px;
+    }
+
+    .stop {
+      margin-left: 40px;
+      font-size: 1.5rem;
+    }
+
+    .play {
+      flex: 2;
+
+      &[data-state="paused"] .play.icon {
+        display: block;
+      }
+
+      &[data-state="playing"] .pause.icon {
+        display: block;
+      }
+
+      &[data-state="seeking"] .seek.icon {
+        display: block;
+      }
+    }
+
+    & svg {
+      display: block;
+      margin: auto;
+
+      .icon {
+        display: none;
+      }
+    }
   }
 
-  .controls .left {
-    margin-left: 0;
+  :host(.playable) {
+    .controls {
+      & button {
+        background: var(--background);
+      }
+    }
   }
 
-  .controls .right {
-    margin-right: 0;
-  }
-
-  .controls hr {
-    margin: 0 3px;
-  }
-
-  :host(.playable) .controls button {
-    background: var(--background);
-  }
-  
-  .controls .stop {
-    margin-left: 40px;
-    font-size: 1.5rem;
-  }
-  
-  .controls .play {
-    flex: 2;
-  }
-  
-  .controls svg {
-    display: block;
-    margin: auto;
-  }
-  
-  .controls svg .icon {
-    display: none;
-  }
-  
-  .play[data-state="paused"] .play.icon {
-    display: block;
-  }
-  
-  .play[data-state="playing"] .pause.icon {
-    display: block;
-  }
-  
-  .play[data-state="seeking"] .seek.icon {
-    display: block;
-  }
-  
   :host(.disabled) {
     display: none;
     --accent: var(--border);
   }
-  
-  :host(.disabled) .controls,
-  :host(.disabled) .progress-container {
+
+  :host(.disabled) .controls, :host(.disabled) .progress-container {
     pointer-events: none;
     opacity: .5;
   }
 
-  /* landscape styles */
+  @keyframes player-enter {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
 
   @media (min-aspect-ratio: 1/1) {
     .container {
       display: grid;
       grid-template-columns: 3fr 2fr;
-      grid-template-areas:
-        "meta track"
-        "meta controls"
-      ;
+      grid-template-areas: "meta track"
+          "meta controls";
       justify-items: stretch;
       align-items: center;
       gap: 8px;
-    }
-
-    .metadata {
-      grid-area: meta;
-      padding-bottom: 0;
-    }
-
-    .metadata .title {
-      white-space: normal;
-    }
-
-    .track {
-      grid-area: track;
-      width: 100%;
-    }
-
-    .controls {
-      grid-area: controls;
-      width: 100%;
-      padding-top: 0;
     }
   }
 </style>

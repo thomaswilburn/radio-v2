@@ -51,12 +51,12 @@
     font-family: var(--content-font);
     padding: 4px 24px 24px;
     font-size: 1rem;
+
+    &:focus {
+      outline: none;
+    }
   }
 
-  .description:focus {
-    outline: none;
-  }
-  
   :host(.expanded) .description {
     display: block;
   }

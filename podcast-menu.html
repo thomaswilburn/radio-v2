@@ -15,11 +15,11 @@
   font-family: inherit;
   font-size: inherit;
   padding: 0 8px;
-}
 
-.toggle.open {
-  transform: rotate(90deg);
-  font-weight: bold;
+  &.open {
+    transform: rotate(90deg);
+    font-weight: bold;
+  }
 }
 
 .screen {
@@ -43,22 +43,21 @@
   color: var(--foreground);
   box-shadow: 0 8px 16px #000C;
   transition: transform .1s linear;
-}
 
-.menu.upward {
-  transform: translateY(-100%);
-}
+  &.upward {
+    transform: translateY(-100%);
+  }
 
-.menu button {
-  display: block;
-  background: transparent;
-  border: none;
-  text-transform: uppercase;
-  padding: 8px;
-  font-size: 16px;
-  font-family: var(--ui-font);
+  & button {
+    display: block;
+    background: transparent;
+    border: none;
+    text-transform: uppercase;
+    padding: 8px;
+    font-size: 16px;
+    font-family: var(--ui-font);
+  }
 }
-
 </style>
 <button
   aria-label="podcast actions"
