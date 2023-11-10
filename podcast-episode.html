@@ -49,7 +49,7 @@
   .description {
     display: none;
     font-family: var(--content-font);
-    padding: 4px 24px 24px;
+    padding: 4px 24px 4px;
     font-size: 1rem;
 
     &:focus {
@@ -60,10 +60,28 @@
   :host(.expanded) .description {
     display: block;
   }
+
+  .actions {
+    padding: 4px 24px 24px;
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    & a {
+      color: inherit;
+      &:not([href]), &[href=""] {
+        display: none;
+      }
+    }
+  }
+
+  :host(:not(.expanded)) .actions {
+    display: none;
+  }
+
 </style>
 <div class="metadata">
   <div class="title" as="title">
-    <slot name="title"></slot>
+    <!-- <slot name="title"></slot> -->
   </div>
   <hr aria-hidden="true">
   <button as="playButton">
@@ -71,5 +89,9 @@
   </button>
 </div>
 <div class="description" as="description" tabindex="-1">
-  <slot name="description"></slot>
+  <!-- <slot name="description"></slot> -->
+</div>
+<div class="actions">
+  <a target="_new" as="link">View in browser</a>
+  <a target="_new" as="download">Download as file</a>
 </div>

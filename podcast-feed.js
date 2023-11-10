@@ -204,6 +204,7 @@ class PodcastFeed extends ElementBase {
         <div slot="title">${widont(item.title)}</div>
         <div slot="description">${item.description.replace(/\n+/g, "<br><br>")}</div>
       `;
+      episode.episodeData = item;
       episode.setAttribute("role", "listitem");
       return episode;
     });
