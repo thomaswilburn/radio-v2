@@ -27,6 +27,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   overscroll-behavior: contain;
+
+  @media (min-aspect-ratio: 1 / 1) {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 40px auto;
+    grid-template-areas:
+      "menu player"
+      "list player";
+  }
 }
 
 .sr-only {
@@ -38,6 +48,7 @@ body {
 menu-bar {
   position: relative;
   z-index: 999;
+  grid-area: menu;
 }
 
 podcast-list {
@@ -45,6 +56,7 @@ podcast-list {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
+  grid-area: list;
 }
 
 podcast-feed { 
@@ -67,4 +79,7 @@ audio-player {
   position: sticky;
   bottom: 0;
   z-index: 99999;
+  min-height: 0;
+
+  grid-area: player;
 }
