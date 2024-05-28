@@ -42,6 +42,7 @@ class PodcastEpisode extends ElementBase {
   set episodeData(data) {
     this.elements.title.innerHTML = data.title.trim();
     this.elements.description.innerHTML = data.description.replace(/\n+/g, "<br><br>");
+    this.elements.date.innerHTML = data.date.toLocaleString();
     this.elements.download.href = data.enclosure || "";
     var mp3 = new URL(data.enclosure);
     this.elements.download.setAttribute("download", mp3.pathname.split("/").pop());

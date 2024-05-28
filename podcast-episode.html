@@ -44,6 +44,7 @@
     flex: 1;
     text-overflow: ellipsis;
     overflow: hidden;
+    cursor: pointer;
   }
   
   .description {
@@ -66,6 +67,7 @@
     display: flex;
     justify-content: space-between;
     text-align: right;
+    font-size: 12px;
     & a {
       color: inherit;
       &:not([href]), &[href=""] {
@@ -92,6 +94,7 @@
   <!-- <slot name="description"></slot> -->
 </div>
 <div class="actions">
-  <a target="_new" as="link">View in browser</a>
-  <a target="_new" as="download">Download as file</a>
+  <div class="date" as="date"></div>
+  <a target="_new" as="link">View page</a>
+  <a target="_new" as="download">Download MP3</a>
 </div>

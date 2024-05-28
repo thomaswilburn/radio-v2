@@ -4,7 +4,23 @@ import app from "./app.js";
 import "./podcast-episode.js";
 import "./podcast-menu.js";
 
-var removeCDATA = str => str.replace(/^<!\[CDATA\[|<[^>]+>|\]\]>$/g, "").trim();
+var removeCDATA = str => str.replace(/^<!\[CDATA\[|\]\]>$/g, "").trim();
+
+var parser = new DOMParser();
+
+var sanitizeHTML = function(source) {
+  // strip everything after a manual line break
+  source = source.replace(/<br\s*\/?>.*/, "");
+  var fragment = parser.parseFromString(removeCDATA(source), "text/html");
+  var paragraphs = fragment.querySelectorAll("p");
+  var blurb;
+  if (paragraphs.length) {
+    blurb = paragraphs[0].innerText;
+  } else {
+    blurb = fragment.body.innerText;
+  }
+  return blurb;
+}
 
 class PodcastFeed extends ElementBase {
 
@@ -200,10 +216,6 @@ class PodcastFeed extends ElementBase {
     matchData(this, items, "enclosure", function(item) {
       var episode = document.createElement("podcast-episode");
       episode.setAttribute("src", item.enclosure);
-      episode.innerHTML = `
-        <div slot="title">${widont(item.title)}</div>
-        <div slot="description">${item.description.replace(/\n+/g, "<br><br>")}</div>
-      `;
       episode.episodeData = item;
       episode.setAttribute("role", "listitem");
       return episode;
@@ -218,12 +230,16 @@ class PodcastFeed extends ElementBase {
       var result = {
         description: "No description provided."
       };
-      ["pubDate", "title", "description", "link"].forEach(function(k) {
+      ["pubDate", "title", "link"].forEach(function(k) {
         var element = $.one(k, item);
         var text = "";
         if (element) text = removeCDATA(element.textContent);
         if (text) result[k] = text;
       });
+      var description = item.querySelector("encoded") || item.querySelector("description");
+      if (description) {
+        result.description = sanitizeHTML(description.textContent);
+      }
       var enclosure = item.querySelector("enclosure");
       if (!enclosure) return null;
       result.enclosure = enclosure.getAttribute("url");
