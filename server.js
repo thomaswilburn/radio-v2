@@ -21,7 +21,7 @@ var fetch = function(address, req, output) {
   delete headers.host;
   delete headers.referer;
   console.log(`Fetching: ${parsed.toString()}`);
-  headers["User-Agent"] = "Radio";
+  headers["user-agent"] = "Radio";
   var p = remote.get({
     host,
     path: pathname + search,
@@ -31,12 +31,14 @@ var fetch = function(address, req, output) {
       console.log(`Redirected from ${parsed.toString()} to ${proxied.headers.location}`);
       return fetch(proxied.headers.location, req, output);
     }
+    delete proxied.headers["content-security-policy-report-only"];
     output.writeHead(proxied.statusCode, proxied.headers);
     proxied.pipe(output);
   });
   p.on("error", err => {
+    console.log(err);
     output.writeHead(500);
-    output.end(JSON.stringify(err));
+    output.end();
   });
 }
 

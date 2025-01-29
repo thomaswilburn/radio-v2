@@ -33,6 +33,7 @@ class AudioPlayer extends ElementBase {
     this.audio.addEventListener("timeupdate", this.onAudioUpdate);
     this.audio.addEventListener("seeking", this.onAudioUpdate);
     this.audio.addEventListener("error", this.onAudioError);
+    this.audio.addEventListener("stalled", this.onAudioError);
     this.audio.addEventListener("loadedmetadata", () => this.classList.add("playable"));
     app.on("play-request", this.onPlayRequest);
     app.on("player-reload", this.onReloadPlayer);
