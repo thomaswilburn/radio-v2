@@ -86,10 +86,12 @@ class AudioPlayer extends ElementBase {
     this.setMediaSession(podcast.title, podcast.feed, podcast.artwork, podcast.credit);
   }
   
-  onPlayRequest(request) {
+  async onPlayRequest(request) {
+    // check for this in memory
+    var bookmarked = await this.memory.get(request.enclosure);
     this.setMetadataDisplay(request);
     this.audio.src = request.enclosure;
-    this.audio.currentTime = 0;
+    this.audio.currentTime = bookmarked?.time || 0;
     this.audio.play();
     this.setEnabled(true);
     this.memorize({
@@ -98,7 +100,7 @@ class AudioPlayer extends ElementBase {
       src: request.enclosure,
       artwork: request.artwork,
       credit: request.credit,
-      time: 0
+      time: this.audio.currentTime
     });
   }
   
@@ -154,7 +156,15 @@ class AudioPlayer extends ElementBase {
     if ("duration" in update && !update.duration) {
       return;
     }
+    update.timestamp = Date.now();
     await this.memory.set("playing", update);
+    await this.memory.set(update.src, update);
+    // expire bookmarks older than one week
+    var expiration = Date.now() - (1000 * 60 * 60 * 24 * 7);
+    for await (var item of this.memory.where(d => d.timestamp < expiration)) {
+      console.log("Expiring playback bookmark", item.src);
+      this.memory.delete(item.src);
+    }
   }
   
   updateTime(time = this.audio.currentTime, duration = this.audio.duration) {
