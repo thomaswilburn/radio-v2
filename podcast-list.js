@@ -4,8 +4,6 @@ import app from "./app.js";
 import "./podcast-feed.js";
 import { measure, flip } from "./lib/flip.js";
 
-const OVERSCROLL_THRESHOLD = window.innerHeight * .5;
-const REFRESH_THRESHOLD = OVERSCROLL_THRESHOLD * .8;
 const START_OVERSCROLL = 30;
 
 class PodcastList extends ElementBase {
@@ -106,6 +104,8 @@ class PodcastList extends ElementBase {
   }
 
   onTouchEnd(e) {
+    const OVERSCROLL_THRESHOLD = window.innerHeight * .5;
+    const REFRESH_THRESHOLD = OVERSCROLL_THRESHOLD * .8;
     if (this.scrollOrigin && this.scrollTop == 0) {
       var offset = e.changedTouches[0].clientY - this.scrollOrigin;
       if (offset > REFRESH_THRESHOLD) app.fire("refresh-all");
@@ -117,6 +117,8 @@ class PodcastList extends ElementBase {
   }
 
   onTouchMove(e) {
+    const OVERSCROLL_THRESHOLD = window.innerHeight * .5;
+    const REFRESH_THRESHOLD = OVERSCROLL_THRESHOLD * .8;
     if (this.scrollOrigin) {
       var { refresh } = this.elements;
       var offset = e.changedTouches[0].clientY - this.scrollOrigin;
