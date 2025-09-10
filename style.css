@@ -15,6 +15,7 @@
   --border: #AAA;
   --accent: #623b62;
   font-size: 16px;
+  overscroll-behavior: none;
 }
 
 body {
