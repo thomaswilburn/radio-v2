@@ -29,6 +29,8 @@
     @media (min-aspect-ratio: 1) {
       display: grid;
       grid-template-rows: auto min-content;
+      grid-template-columns: 1fr;
+      grid-template-areas: "thumb" "titles";
       justify-content: space-between;
       padding-bottom: 0;
     }
@@ -41,6 +43,7 @@
       display: block;
       min-height: 0;
       overflow: hidden;
+      grid-area: thumb;
 
       @media (min-aspect-ratio: 1) {
         width: 100%;
@@ -52,6 +55,7 @@
       flex: 1;
       min-width: 0;
       padding-left: 8px;
+      grid-area: titles;
       @media (min-aspect-ratio: 1) {
         padding: 8px 0;
       }
