@@ -177,10 +177,20 @@ class PodcastFeed extends ElementBase {
       } else {
         console.error("Unable to load feed: ", url);
       }
+      if (!this.feed?.length) {
+        this.dataset.unheard = 0;
+      }
       return;
     }
     this.classList.remove("loading");
-    var parsed = this.parseFeed(xml);
+    var parsed = [];
+    try {
+      parsed = this.parseFeed(xml);
+    } catch (err) {
+      console.error(`Feed for ${metadata.title} (${url}) could not be parsed.`);
+      this.dataset.unheard = 0;
+      return;
+    }
     // save title and current request time for later
     metadata.title = parsed.title;
     metadata.requested = Date.now();
