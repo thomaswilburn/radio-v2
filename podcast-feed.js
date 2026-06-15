@@ -177,7 +177,7 @@ class PodcastFeed extends ElementBase {
       } else {
         console.error("Unable to load feed: ", url);
       }
-      if (!this.feed?.length) {
+      if (!this.feed?.items.length) {
         this.dataset.unheard = 0;
       }
       return;
@@ -188,7 +188,6 @@ class PodcastFeed extends ElementBase {
       parsed = this.parseFeed(xml);
     } catch (err) {
       console.error(`Feed for ${metadata.title} (${url}) could not be parsed.`);
-      this.dataset.unheard = 0;
       return;
     }
     // save title and current request time for later
