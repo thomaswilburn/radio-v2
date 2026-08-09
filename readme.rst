@@ -1,3 +1,5 @@
+This repo is no longer active, and has moved to Codeberg at: https://codeberg.org/thomaswilburn/radio
+
 Radio V2
 ========
 
